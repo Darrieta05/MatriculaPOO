@@ -34,11 +34,11 @@ public class MateriaController {
     // Obtener una materia por id
     @GetMapping("/materia/{id}")
     public ResponseEntity<Materia> getMateriaById(@PathVariable(value = "id") Integer materiaId) {
-        Materia calles = materiaRepository.findOne(materiaId);
-        if (calles == null) {
+        Materia materia = materiaRepository.findOne(materiaId);
+        if (materia == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok().body(calles);
+        return ResponseEntity.ok().body(materia);
     }
 
     // Actualizar una materia
@@ -67,7 +67,7 @@ public class MateriaController {
         if (materia == null) {
             return ResponseEntity.notFound().build();
         }
-        materiaRepository.save(materia);
+        materiaRepository.delete(materia);
         return ResponseEntity.ok().build();
     }
 }

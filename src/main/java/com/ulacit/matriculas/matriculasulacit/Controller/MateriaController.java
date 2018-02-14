@@ -11,7 +11,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/Materia")
+@RequestMapping("/apiMateria")
 public class MateriaController {
 
     @Autowired

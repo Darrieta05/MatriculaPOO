@@ -48,11 +48,13 @@ public class MateriaController {
         if (materia == null) {
             return ResponseEntity.notFound().build();
         }
+        materia.setCodigo(materiaDetails.getNombre() != null && !materiaDetails.getNombre().equals("") ? materiaDetails.getNombre() : materia.getNombre());
+        materia.setCosto(materiaDetails.getCosto() != null ? materiaDetails.getCosto() : materia.getCosto());
+        materia.setCreditos(materiaDetails.getCreditos() != null ? materiaDetails.getCreditos() : materia.getCreditos());
+        materia.setAula(materiaDetails.getAula() != null ? materiaDetails.getAula() : materia.getAula());
         materia.setNombre(materiaDetails.getNombre() != null && !materiaDetails.getNombre().equals("") ? materiaDetails.getNombre() : materia.getNombre());
         materia.setCarrera(materiaDetails.getCarrera() != null ? materiaDetails.getCarrera() : materia.getCarrera());
-        materia.setFechaFin(materiaDetails.getFechaFin() != null ? materiaDetails.getFechaFin() : materia.getFechaFin());
-        materia.setFechaInicio(materiaDetails.getFechaInicio() != null ? materiaDetails.getFechaInicio() : materia.getFechaInicio());
-        materia.setEstatus(materiaDetails.getEstatus() != null ? materiaDetails.getEstatus() : materia.getEstatus());
+
         Materia updatedMateria = materiaRepository.save(materia);
         return ResponseEntity.ok(updatedMateria);
     }
@@ -64,7 +66,6 @@ public class MateriaController {
         if (materia == null) {
             return ResponseEntity.notFound().build();
         }
-        materia.setEstatus(0);
         materiaRepository.save(materia);
         return ResponseEntity.ok().build();
     }

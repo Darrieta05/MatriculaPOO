@@ -20,7 +20,8 @@ public class Contacto {
     private String tipo;
 
 
-    public Contacto() {
+    public Contacto()
+    {
         super();
     }
 

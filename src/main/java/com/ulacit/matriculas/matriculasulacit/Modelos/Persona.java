@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "persona")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(allowGetters = true, allowSetters = true)
-public class Persona {
+public abstract class Persona {
 
     private Integer idPersona;
     private Integer cedula;

@@ -9,11 +9,9 @@ import javax.persistence.*;
 @Table(name = "profesor")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(allowGetters = true, allowSetters = true)
-public class Profesor {
+public class Profesor extends Persona{
 
-    private Integer idProfesor;
     private String especialidad;
-
 
     public Profesor() {
         super();
@@ -21,20 +19,10 @@ public class Profesor {
 
     @Override
     public String toString() {
-        return "Profesor{" +
-                "idProfesor=" + idProfesor +
+        return  "Profesor{" +
+                "idProfesor=" + getIdPersona() +
                 ", especialidad='" + especialidad + '\'' +
                 '}';
-    }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public Integer getIdProfesor() {
-        return idProfesor;
-    }
-
-    public void setIdProfesor(Integer idProfesor) {
-        this.idProfesor = idProfesor;
     }
 
     @Column(name = "especialidad")

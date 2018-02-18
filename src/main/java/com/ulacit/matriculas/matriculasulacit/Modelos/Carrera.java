@@ -1,5 +1,12 @@
 package com.ulacit.matriculas.matriculasulacit.Modelos;
 
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "Carrera")
+@EntityListeners(AuditingEntityListener.class)
 public class Carrera {
 
     private Integer idCarrera;
@@ -21,6 +28,9 @@ public class Carrera {
                 '}';
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idCarrera")
     public Integer getIdCarrera() {
         return idCarrera;
     }
@@ -29,6 +39,7 @@ public class Carrera {
         this.idCarrera = idCarrera;
     }
 
+    @Column(name = "codigo")
     public String getCodigo() {
         return codigo;
     }
@@ -37,6 +48,7 @@ public class Carrera {
         this.codigo = codigo;
     }
 
+    @Column(name = "nombre")
     public String getNombre() {
         return nombre;
     }
@@ -45,6 +57,7 @@ public class Carrera {
         this.nombre = nombre;
     }
 
+    @Column(name = "totalCreditos")
     public Integer getTotalCreditos() {
         return totalCreditos;
     }

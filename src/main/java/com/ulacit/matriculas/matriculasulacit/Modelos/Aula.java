@@ -6,9 +6,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "aula")
+@Table(name = "Aula")
 @EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(allowGetters = true, allowSetters = true)
 public class Aula {
 
     private Integer idAula;

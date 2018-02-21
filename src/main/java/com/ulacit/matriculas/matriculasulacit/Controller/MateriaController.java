@@ -11,14 +11,14 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/apiMateria")
+@RequestMapping("/api")
 public class MateriaController {
 
     @Autowired
     MateriaRepository materiaRepository;
 
 
-    // Obtener todas las calles
+    // Obtener todas las materias
     @GetMapping("/materia")
     public List<Materia> getAllMateria() {
 
@@ -27,7 +27,7 @@ public class MateriaController {
 
     // Crear una materia
     @PostMapping("/materia")
-    public Materia createCalle(@Valid @RequestBody Materia materia) {
+    public Materia createMateria(@Valid @RequestBody Materia materia) {
         return materiaRepository.save(materia);
     }
 
@@ -49,7 +49,7 @@ public class MateriaController {
         if (materia == null) {
             return ResponseEntity.notFound().build();
         }
-        materia.setCodigo(materiaDetails.getNombre() != null && !materiaDetails.getNombre().equals("") ? materiaDetails.getNombre() : materia.getNombre());
+        materia.setCodigo(materiaDetails.getCodigo()!= null && !materiaDetails.getCodigo().equals("") ? materiaDetails.getCodigo() : materia.getCodigo());
         materia.setCosto(materiaDetails.getCosto() != null ? materiaDetails.getCosto() : materia.getCosto());
         materia.setCreditos(materiaDetails.getCreditos() != null ? materiaDetails.getCreditos() : materia.getCreditos());
         materia.setAula(materiaDetails.getAula() != null ? materiaDetails.getAula() : materia.getAula());

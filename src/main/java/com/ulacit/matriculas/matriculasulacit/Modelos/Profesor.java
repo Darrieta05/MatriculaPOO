@@ -11,6 +11,7 @@ import javax.persistence.*;
 @JsonIgnoreProperties(allowGetters = true, allowSetters = true)
 public class Profesor extends Persona{
 
+    
     private String especialidad;
 
     public Profesor() {
@@ -20,11 +21,11 @@ public class Profesor extends Persona{
     @Override
     public String toString() {
         return  "Profesor{" +
-                "idProfesor=" + getIdPersona() +
+                "idProfesor=" + getIdPersona()+
                 ", especialidad='" + especialidad + '\'' +
                 '}';
     }
-
+    
     @Column(name = "especialidad")
     public String getEspecialidad() {
         return especialidad;

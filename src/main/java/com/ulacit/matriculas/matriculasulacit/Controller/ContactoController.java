@@ -1,6 +1,8 @@
 package com.ulacit.matriculas.matriculasulacit.Controller;
 
+import com.ulacit.matriculas.matriculasulacit.Modelos.Alumno;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Contacto;
+import com.ulacit.matriculas.matriculasulacit.Modelos.Persona;
 import com.ulacit.matriculas.matriculasulacit.Repository.ContactoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

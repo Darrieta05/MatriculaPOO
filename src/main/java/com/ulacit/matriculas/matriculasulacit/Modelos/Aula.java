@@ -31,7 +31,7 @@ public class Aula {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idAula")
+    @Column(name = "id_aula")
     public Integer getIdAula() {
         return idAula;
     }
@@ -58,7 +58,7 @@ public class Aula {
         this.area = area;
     }
 
-    @Column(name = "numeroAula")
+    @Column(name = "numero_aula")
     public String getNumeroAula() {
         return numeroAula;
     }

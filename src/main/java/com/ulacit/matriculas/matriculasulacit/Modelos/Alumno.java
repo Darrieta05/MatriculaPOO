@@ -9,10 +9,6 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
-@Table(name = "Alumno")
-@EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(allowGetters = true, allowSetters = true)
-
 public class Alumno extends Persona {
 
     private int alumnoId;
@@ -94,7 +90,6 @@ public class Alumno extends Persona {
         this.carrera = carrera;
     }
 
-    @Column(name = "beca")
     public String getBeca() {
         return Beca;
     }

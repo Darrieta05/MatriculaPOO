@@ -9,10 +9,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "Matricula")
-@EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(allowGetters = true, allowSetters = true)
-
 public class Matricula {
     
     private Integer idMatricula;
@@ -26,18 +22,7 @@ public class Matricula {
     {
         super();
     }
-    
-    @Override
-    public String toString() {
-        return "Matricula{" +
-                "idMatricula=" + idMatricula +
-                ", idUsuario='" + usuario + '\'' +
-                ", idAlumno='" + alumno + '\'' +
-                ", fecha='" + Fecha + '\'' +
-                ", monto='" + Monto + '\'' +
-                ", total='" + Total + '\'' +
-                '}';
-    }
+
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -68,8 +53,7 @@ public class Matricula {
     public void setAlumno(Alumno alumno) {
         this.alumno = alumno;
     }
-    
-    @Column(name = "fecha")
+
     public Date getFecha() {
         return Fecha;
     }
@@ -77,8 +61,7 @@ public class Matricula {
     public void setFecha(Date Fecha) {
         this.Fecha = Fecha;
     }
-    
-    @Column(name = "monto")
+
     public Double getMonto() {
         return Monto;
     }
@@ -86,8 +69,7 @@ public class Matricula {
     public void setMonto(Double Monto) {
         this.Monto = Monto;
     }
-    
-    @Column(name = "total")
+
     public Double getTotal() {
         return Total;
     }

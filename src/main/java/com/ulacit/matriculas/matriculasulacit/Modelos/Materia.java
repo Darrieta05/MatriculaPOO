@@ -8,9 +8,6 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
-@Table(name = "Materia")
-@EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(allowGetters = true, allowSetters = true)
 public class Materia {
 
 
@@ -27,22 +24,9 @@ public class Materia {
         super();
     }
 
-    @Override
-    public String toString() {
-        return "Materia{" +
-                "idMateria=" + idMateria +
-                ", nombre='" + nombre + '\'' +
-                ", codigo='" + codigo + '\'' +
-                ", costo=" + costo +
-                ", creditos=" + creditos +
-                ", carrera=" + carrera +
-                ", aula=" + aula +
-                '}';
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idMateria")
     public Integer getIdMateria() {
         return idMateria;
     }
@@ -51,7 +35,6 @@ public class Materia {
         this.idMateria = idMateria;
     }
 
-    @Column(name = "nombre")
     public String getNombre() {
         return nombre;
     }
@@ -59,8 +42,6 @@ public class Materia {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
-    @Column(name = "codigo")
     public String getCodigo() {
         return codigo;
     }
@@ -69,7 +50,6 @@ public class Materia {
         this.codigo = codigo;
     }
 
-    @Column(name = "costo")
     public Double getCosto() {
         return costo;
     }
@@ -78,7 +58,6 @@ public class Materia {
         this.costo = costo;
     }
 
-    @Column(name = "creditos")
     public Integer getCreditos() {
         return creditos;
     }

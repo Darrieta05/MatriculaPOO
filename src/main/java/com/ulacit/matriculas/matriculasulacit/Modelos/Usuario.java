@@ -8,10 +8,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "Usuario")
-@EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(allowGetters = true, allowSetters = true)
-
 public class Usuario {
     
     private Integer idUsuario;
@@ -22,15 +18,7 @@ public class Usuario {
     {
         super();
     }
-    
-    @Override
-    public String toString() {
-        return  "Usuario{" +
-                "idUsuario=" + idUsuario +
-                ", nombre='" + Nombre + '\'' +
-                ", clave='" + Clave + '\'' +
-                '}';
-    }
+
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -41,8 +29,7 @@ public class Usuario {
     public void setIdUsuario(Integer idUsuario) {
         this.idUsuario = idUsuario;
     }
-    
-    @Column(name = "nombre")
+
     public String getNombre() {
         return Nombre;
     }
@@ -51,7 +38,7 @@ public class Usuario {
         this.Nombre = Nombre;
     }
     
-    @Column(name = "clave")
+
     public String getClave() {
         return Clave;
     }

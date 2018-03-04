@@ -6,8 +6,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Aula")
-@EntityListeners(AuditingEntityListener.class)
 public class Aula {
 
     private Integer idAula;
@@ -17,16 +15,6 @@ public class Aula {
 
     public Aula() {
         super();
-    }
-
-    @Override
-    public String toString() {
-        return "Aula{" +
-                "idAula=" + idAula +
-                ", tipo='" + tipo + '\'' +
-                ", area='" + area + '\'' +
-                ", numeroAula='" + numeroAula + '\'' +
-                '}';
     }
 
     @Id

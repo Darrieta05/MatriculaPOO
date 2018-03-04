@@ -9,24 +9,24 @@ import javax.persistence.*;
 @Table(name = "Profesor")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(allowGetters = true, allowSetters = true)
-public class Profesor extends Persona{
+public class Profesor extends Persona {
 
-    
+    private int idProfesor;
     private String especialidad;
 
     public Profesor() {
         super();
     }
 
-    @Override
-    public String toString() {
-        return  "Profesor{" +
-                "idProfesor=" + getIdPersona()+
-                ", especialidad='" + especialidad + '\'' +
-                '}';
+
+    public int getIdProfesor() {
+        return idProfesor;
     }
-    
-    @Column(name = "especialidad")
+
+    public void setIdProfesor(int idProfesor) {
+        this.idProfesor = idProfesor;
+    }
+
     public String getEspecialidad() {
         return especialidad;
     }

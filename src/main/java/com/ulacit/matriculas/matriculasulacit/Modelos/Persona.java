@@ -7,9 +7,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "Persona")
-@EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(allowGetters = true, allowSetters = true)
 public abstract class Persona {
 
     private Integer idPersona;
@@ -24,18 +21,6 @@ public abstract class Persona {
         super();
     }
 
-    @Override
-    public String toString() {
-        return "Persona{" +
-                "idPersona=" + idPersona +
-                ", cedula=" + cedula +
-                ", nombre='" + nombre + '\'' +
-                ", apellido='" + apellido + '\'' +
-                ", edad=" + edad +
-                ", sexo='" + sexo + '\'' +
-                '}';
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getIdPersona() {
@@ -46,8 +31,6 @@ public abstract class Persona {
         this.idPersona = idPersona;
     }
 
-    @Column(name = "cedula")
-    @NotNull
     public Integer getCedula() {
         return cedula;
     }
@@ -56,8 +39,7 @@ public abstract class Persona {
         this.cedula = cedula;
     }
 
-    @Column(name = "nombre")
-    @NotNull
+
     public String getNombre() {
         return nombre;
     }
@@ -65,7 +47,7 @@ public abstract class Persona {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    @Column(name = "apellido")
+
     public String getApellido() {
         return apellido;
     }
@@ -74,7 +56,7 @@ public abstract class Persona {
         this.apellido = apellido;
     }
 
-    @Column(name = "edad")
+
     public Integer getEdad() {
         return edad;
     }
@@ -83,7 +65,7 @@ public abstract class Persona {
         this.edad = edad;
     }
 
-    @Column(name = "sexo")
+
     public String getSexo() {
         return sexo;
     }

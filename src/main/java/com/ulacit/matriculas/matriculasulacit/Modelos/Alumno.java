@@ -6,31 +6,84 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Entity
 @Table(name = "Alumno")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(allowGetters = true, allowSetters = true)
 
-public class Alumno extends Persona{
-    
+public class Alumno extends Persona {
+
+    private int alumnoId;
+
     private Carrera carrera;
     private String Beca;
-    
-    public Alumno()
-    {
+
+
+    /*Audit fields*/
+    //@JsonFormat(pattern="yyyy-MM-dd@HH:mm:ss.SSSZ")
+    private Date creationDate;
+    //@JsonFormat(pattern="yyyy-MM-dd@HH:mm:ss.SSSZ")
+    private Date updatedDate;
+    private int createdBy;
+    private int updatedBy;
+    /*@ApiModelProperty(notes = "Indica si el registro se eliminó")*/
+    private Boolean deleted = false;
+
+
+    public Alumno() {
         super();
     }
-    
-    @Override
-    public String toString() {
-        return  "Alumno{" +
-                "idAlumno=" + getIdPersona() +
-                ", idCarrera='" + carrera + '\'' +
-                ", beca='" + Beca + '\'' +
-                '}';
+
+    public int getAlumnoId() {
+        return alumnoId;
     }
-    
+
+    public void setAlumnoId(int alumnoId) {
+        this.alumnoId = alumnoId;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Date getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+
+    public int getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(int createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public int getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(int updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idCarrera")
     public Carrera getCarrera() {
@@ -40,7 +93,7 @@ public class Alumno extends Persona{
     public void setCarrera(Carrera carrera) {
         this.carrera = carrera;
     }
-    
+
     @Column(name = "beca")
     public String getBeca() {
         return Beca;

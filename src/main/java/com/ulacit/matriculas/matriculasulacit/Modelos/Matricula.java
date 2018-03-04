@@ -1,12 +1,8 @@
 package com.ulacit.matriculas.matriculasulacit.Modelos;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.Date;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+
 
 @Entity
 public class Matricula {

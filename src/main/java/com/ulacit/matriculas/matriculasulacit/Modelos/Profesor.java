@@ -1,14 +1,8 @@
 package com.ulacit.matriculas.matriculasulacit.Modelos;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Profesor")
-@EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(allowGetters = true, allowSetters = true)
 public class Profesor extends Persona {
 
     private int idProfesor;
@@ -18,7 +12,8 @@ public class Profesor extends Persona {
         super();
     }
 
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getIdProfesor() {
         return idProfesor;
     }

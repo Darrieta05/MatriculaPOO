@@ -103,7 +103,7 @@ public class AlumnoController {
                     alumno.setCarrera(alumnoObj.getCarrera());
                     alumno.setDeleted(false);
                     alumno.setCreationDate(alumnoObj.getCreationDate());
-                    alumno.setUpdatedBy(alumno.getUpdatedBy());
+                    alumno.setUpdatedBy(alumnoObj.getUpdatedBy());
                     alumno.setUpdatedDate(currentDate);
                     alumno.setCreatedBy(alumnoObj.getCreatedBy());
 

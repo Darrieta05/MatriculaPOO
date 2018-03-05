@@ -1,68 +1,147 @@
 package com.ulacit.matriculas.matriculasulacit.Controller;
 
+
+import com.ulacit.matriculas.matriculasulacit.Modelos.Alumno;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Aula;
-import com.ulacit.matriculas.matriculasulacit.Modelos.Profesor;
+import com.ulacit.matriculas.matriculasulacit.Modelos.Constants;
+import com.ulacit.matriculas.matriculasulacit.Modelos.ResponseObject;
 import com.ulacit.matriculas.matriculasulacit.Repository.AulaRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
+
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/aula")
 public class AulaController {
+
     AulaRepository aulaRepository;
 
-    @GetMapping("/aula")
-    public List<Aula> getAllAula() {
+    private ResponseObject response;
+    private Date currentDate;
 
-        return aulaRepository.findAll();
-    }
 
-    @GetMapping("/aulitas")
-    public String getTest() {
+    /* @ApiOperation(value = "Retorna el listado de todas las aulas")*/
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseObject GetAll() {
+        response = new ResponseObject();
 
-        return "Hola";
-    }
-
-    @PostMapping("/aula")
-    public Aula createAula(@Valid @RequestBody Aula aula) {
-        return aulaRepository.save(aula);
-    }
-
-    @GetMapping("/aula/{id}")
-    public ResponseEntity<Aula> getAulaById(@PathVariable(value = "id") Integer aulaId) {
-        Aula aula = aulaRepository.findOne(aulaId);
-        if (aula == null) {
-            return ResponseEntity.notFound().build();
+        try {
+            List<Aula> listaAula = aulaRepository.findByDeleted(false);
+            response.setResponse(listaAula);
+        } catch (Exception e) {
+            response.setMessage(e.getMessage());
+            response.setHttpStatus(Constants.badRequest);
         }
-        return ResponseEntity.ok().body(aula);
+
+        return response;
     }
 
-    @PutMapping("/aula/{id}")
-    public ResponseEntity<Aula> updateAula(@PathVariable(value = "id") Integer aulaId,
-                                                   @RequestBody Aula aulaDetails) {
-        Aula aula = aulaRepository.findOne(aulaId);
-        if (aula == null) return ResponseEntity.notFound().build();
+    /*@ApiOperation(value = "Obtiene un alumno filtrándolo por el parámetro idAula")*/
+    @RequestMapping(method = RequestMethod.GET, value = "/{idAula}")
+    public ResponseObject GetById(@PathVariable("idAula") Integer idAula) {
+        response = new ResponseObject();
 
-        aula.setTipo(aulaDetails.getTipo());
-        aula.setArea(aulaDetails.getArea());
-        aula.setNumeroAula(aulaDetails.getNumeroAula());
+        try {
+            Aula aula = aulaRepository.findByAulaIdInAndDeletedIn(idAula, false);
+            response.setResponse(aula);
+        } catch (Exception e) {
+            response.setMessage(e.getMessage());
+            response.setHttpStatus(Constants.badRequest);
+        }
 
-        Aula updatedAula = aulaRepository.save(aula);
-
-        return ResponseEntity.ok(updatedAula);
+        return response;
     }
 
-    @DeleteMapping("/aula/{id}")
-    public ResponseEntity<Aula> deleteAula(@PathVariable(value = "id") Integer aulaId) {
-        Aula aula = aulaRepository.findOne(aulaId);
-        if (aula == null) return ResponseEntity.notFound().build();
+    /*@ApiOperation(value = "Agrega una nueva aula")*/
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseObject Create(@RequestBody Aula aulaObj) {
+        response = new ResponseObject();
 
-        aulaRepository.delete(aula);
-        return ResponseEntity.ok().build();
+        try {
+            if (aulaObj != null) {
+                response.setRequest(aulaObj);
+
+                aulaObj.setUpdatedBy(aulaObj.getCreatedBy());
+                aulaObj.setCreationDate(currentDate);
+                aulaObj.setUpdatedDate(currentDate);
+                aulaObj.setDeleted(false);
+
+                aulaRepository.save(aulaObj);
+                response.setResponse(aulaObj);
+            }
+        } catch (Exception e) {
+            response.setMessage(e.getMessage());
+            response.setHttpStatus(Constants.badRequest);
+        }
+
+        return response;
+    }
+
+    /*@ApiOperation(value = "Modifica la información de un aulas")*/
+    @RequestMapping(method = RequestMethod.PUT, value = "/{idAula}")
+    public ResponseObject Update(@PathVariable("idAula") Integer idAula, @RequestBody Aula aulaObj) {
+        response = new ResponseObject();
+        Aula aula;
+        currentDate = new Date();
+
+        try {
+            if (aulaObj != null) {
+                aulaObj.setIdAula(idAula);
+                response.setRequest(aulaObj);
+
+                aula = aulaRepository.findByAulaIdInAndDeletedIn(idAula, false);
+
+                if (aula != null)
+
+                {
+                    /*TODO terminar de llamar los objetos faltantes*/
+                    aula.setDeleted(false);
+                    aula.setCreationDate(aulaObj.getCreationDate());
+                    aula.setUpdatedBy(aulaObj.getUpdatedBy());
+                    aula.setUpdatedDate(currentDate);
+                    aula.setCreatedBy(aulaObj.getCreatedBy());
+
+
+                    aulaRepository.save(aula);
+
+                    response.setResponse(aulaObj);
+                } else {
+                    throw new Exception(Constants.itemNotFound);
+                }
+            }
+        } catch (Exception e) {
+            response.setMessage(e.getMessage());
+            response.setHttpStatus(Constants.badRequest);
+        }
+
+        return response;
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{idAula}")
+    public ResponseObject Delete(@PathVariable("idAula") Integer idAula) {
+
+        ResponseObject response = new ResponseObject();
+        Aula aulaStored;
+        try {
+            response.setRequest(idAula);
+            aulaStored = aulaRepository.findOne(idAula);
+
+            if (aulaStored != null) {
+                aulaStored.setDeleted(true);
+                aulaStored.setUpdatedDate(new Date());
+                aulaRepository.save(aulaStored);
+                response.setResponse(Constants.itemDeleted);
+            } else {
+                throw new Exception(Constants.itemNotFound);
+            }
+        } catch (Exception e) {
+            response.setMessage(e.getMessage());
+            response.setHttpStatus(Constants.badRequest);
+        }
+        return response;
     }
 
 }

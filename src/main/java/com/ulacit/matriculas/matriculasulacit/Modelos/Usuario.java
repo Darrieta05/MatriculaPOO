@@ -1,21 +1,32 @@
 package com.ulacit.matriculas.matriculasulacit.Modelos;
 
 import javax.persistence.*;
+import java.util.Date;
 
 
 @Entity
 public class Usuario {
-    
+
     private Integer idUsuario;
-    private String Nombre;
-    private String Clave;
-    
-    public Usuario()
-    {
+    private String nombre;
+    private String clave;
+
+    /*Audit fields*/
+    //@JsonFormat(pattern="yyyy-MM-dd@HH:mm:ss.SSSZ")
+    private Date creationDate;
+    //@JsonFormat(pattern="yyyy-MM-dd@HH:mm:ss.SSSZ")
+    private Date updatedDate;
+    private int createdBy;
+    private int updatedBy;
+    /*@ApiModelProperty(notes = "Indica si el registro se eliminó")*/
+    private Boolean deleted = false;
+
+
+    public Usuario() {
         super();
     }
 
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getIdUsuario() {
@@ -27,19 +38,58 @@ public class Usuario {
     }
 
     public String getNombre() {
-        return Nombre;
+        return nombre;
     }
 
-    public void setNombre(String Nombre) {
-        this.Nombre = Nombre;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
-    
 
     public String getClave() {
-        return Clave;
+        return clave;
     }
 
-    public void setClave(String Clave) {
-        this.Clave = Clave;
+    public void setClave(String clave) {
+        this.clave = clave;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Date getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+
+    public int getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(int createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public int getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(int updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 }

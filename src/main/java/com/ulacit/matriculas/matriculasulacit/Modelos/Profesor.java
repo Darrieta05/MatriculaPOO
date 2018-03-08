@@ -41,52 +41,42 @@ public class Profesor extends Persona {
         this.especialidad = especialidad;
     }
 
-    @Override
     public Date getCreationDate() {
         return creationDate;
     }
 
-    @Override
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
     }
 
-    @Override
     public Date getUpdatedDate() {
         return updatedDate;
     }
 
-    @Override
     public void setUpdatedDate(Date updatedDate) {
         this.updatedDate = updatedDate;
     }
 
-    @Override
     public int getCreatedBy() {
         return createdBy;
     }
 
-    @Override
     public void setCreatedBy(int createdBy) {
         this.createdBy = createdBy;
     }
 
-    @Override
     public int getUpdatedBy() {
         return updatedBy;
     }
 
-    @Override
     public void setUpdatedBy(int updatedBy) {
         this.updatedBy = updatedBy;
     }
 
-    @Override
     public Boolean getDeleted() {
         return deleted;
     }
 
-    @Override
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
     }

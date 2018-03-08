@@ -27,7 +27,6 @@ public class Carrera {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idCarrera")
     public Integer getIdCarrera() {
         return idCarrera;
     }

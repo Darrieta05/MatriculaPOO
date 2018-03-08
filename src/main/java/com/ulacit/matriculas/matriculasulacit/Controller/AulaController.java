@@ -1,11 +1,10 @@
 package com.ulacit.matriculas.matriculasulacit.Controller;
 
-
-import com.ulacit.matriculas.matriculasulacit.Modelos.Alumno;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Aula;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Constants;
 import com.ulacit.matriculas.matriculasulacit.Modelos.ResponseObject;
 import com.ulacit.matriculas.matriculasulacit.Repository.AulaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -17,6 +16,7 @@ import java.util.List;
 @RequestMapping("/api/aula")
 public class AulaController {
 
+    @Autowired
     AulaRepository aulaRepository;
 
     private ResponseObject response;
@@ -97,7 +97,10 @@ public class AulaController {
                 if (aula != null)
 
                 {
-                    /*TODO terminar de llamar los objetos faltantes*/
+                    aula.setIdAula(aulaObj.getIdAula());
+                    aula.setTipo(aulaObj.getTipo());
+                    aula.setArea(aulaObj.getArea());
+                    aula.setNumeroAula(aulaObj.getNumeroAula());
                     aula.setDeleted(false);
                     aula.setCreationDate(aulaObj.getCreationDate());
                     aula.setUpdatedBy(aulaObj.getUpdatedBy());

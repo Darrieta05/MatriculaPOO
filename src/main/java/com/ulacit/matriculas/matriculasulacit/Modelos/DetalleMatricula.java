@@ -39,9 +39,7 @@ public class DetalleMatricula {
     public void setIdDetalleMatricula(Integer idDetalleMatricula) {
         this.idDetalleMatricula = idDetalleMatricula;
     }
-    
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "idMatricula")
+
     public Matricula getMatricula() {
         return matricula;
     }
@@ -50,8 +48,6 @@ public class DetalleMatricula {
         this.matricula = matricula;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "idMateria")
     public Materia getMateria() {
         return materia;
     }

@@ -1,73 +1,152 @@
 package com.ulacit.matriculas.matriculasulacit.Controller;
 
+import com.ulacit.matriculas.matriculasulacit.Modelos.Constants;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Materia;
+import com.ulacit.matriculas.matriculasulacit.Modelos.ResponseObject;
 import com.ulacit.matriculas.matriculasulacit.Repository.MateriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/materia")
 public class MateriaController {
 
     @Autowired
     MateriaRepository materiaRepository;
 
+    private ResponseObject response;
+    private Date currentDate;
 
-    // Obtener todas las materias
-    @GetMapping("/materia")
-    public List<Materia> getAllMateria() {
 
-        return materiaRepository.findAll();
-    }
+    /* @ApiOperation(value = "Retorna el listado de todas las materias")*/
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseObject GetAll() {
+        response = new ResponseObject();
 
-    // Crear una materia
-    @PostMapping("/materia")
-    public Materia createMateria(@Valid @RequestBody Materia materia) {
-        return materiaRepository.save(materia);
-    }
-
-    // Obtener una materia por id
-    @GetMapping("/materia/{id}")
-    public ResponseEntity<Materia> getMateriaById(@PathVariable(value = "id") Integer materiaId) {
-        Materia materia = materiaRepository.findOne(materiaId);
-        if (materia == null) {
-            return ResponseEntity.notFound().build();
+        try {
+            List<Materia> listaMateria = materiaRepository.findByDeleted(false);
+            response.setResponse(listaMateria);
+        } catch (Exception e) {
+            response.setMessage(e.getMessage());
+            response.setHttpStatus(Constants.badRequest);
         }
-        return ResponseEntity.ok().body(materia);
+
+        return response;
     }
 
-    // Actualizar una materia
-    @PutMapping("/materia/{id}")
-    public ResponseEntity<Materia> updateMateria(@PathVariable(value = "id") Integer materiaId,
-                                                 @RequestBody Materia materiaDetails) {
-        Materia materia = materiaRepository.findOne(materiaId);
-        if (materia == null) {
-            return ResponseEntity.notFound().build();
-        }
-        materia.setCodigo(materiaDetails.getCodigo()!= null && !materiaDetails.getCodigo().equals("") ? materiaDetails.getCodigo() : materia.getCodigo());
-        materia.setCosto(materiaDetails.getCosto() != null ? materiaDetails.getCosto() : materia.getCosto());
-        materia.setCreditos(materiaDetails.getCreditos() != null ? materiaDetails.getCreditos() : materia.getCreditos());
-        materia.setAula(materiaDetails.getAula() != null ? materiaDetails.getAula() : materia.getAula());
-        materia.setNombre(materiaDetails.getNombre() != null && !materiaDetails.getNombre().equals("") ? materiaDetails.getNombre() : materia.getNombre());
-        materia.setCarrera(materiaDetails.getCarrera() != null ? materiaDetails.getCarrera() : materia.getCarrera());
+    /*@ApiOperation(value = "Obtiene un alumno filtrándolo por el parámetro idMateria")*/
+    @RequestMapping(method = RequestMethod.GET, value = "/{idMateria}")
+    public ResponseObject GetById(@PathVariable("idMateria") Integer idMateria) {
+        response = new ResponseObject();
 
-        Materia updatedMateria = materiaRepository.save(materia);
-        return ResponseEntity.ok(updatedMateria);
+        try {
+            Materia materia = materiaRepository.findByMateriaIdInAndDeletedIn(idMateria, false);
+            response.setResponse(materia);
+        } catch (Exception e) {
+            response.setMessage(e.getMessage());
+            response.setHttpStatus(Constants.badRequest);
+        }
+
+        return response;
     }
 
-    // Eliminar una materia
-    @DeleteMapping("/materia/{id}")
-    public ResponseEntity<Materia> deleteMateria(@PathVariable(value = "id") Integer materiaId) {
-        Materia materia = materiaRepository.findOne(materiaId);
-        if (materia == null) {
-            return ResponseEntity.notFound().build();
+    /*@ApiOperation(value = "Agrega una nueva materia")*/
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseObject Create(@RequestBody Materia materiaObj) {
+        response = new ResponseObject();
+
+        try {
+            if (materiaObj != null) {
+                response.setRequest(materiaObj);
+
+                materiaObj.setUpdatedBy(materiaObj.getCreatedBy());
+                materiaObj.setCreationDate(currentDate);
+                materiaObj.setUpdatedDate(currentDate);
+                materiaObj.setDeleted(false);
+
+                materiaRepository.save(materiaObj);
+                response.setResponse(materiaObj);
+            }
+        } catch (Exception e) {
+            response.setMessage(e.getMessage());
+            response.setHttpStatus(Constants.badRequest);
         }
-        materiaRepository.delete(materia);
-        return ResponseEntity.ok().build();
+
+        return response;
+    }
+
+    /*@ApiOperation(value = "Modifica la información de una materia")*/
+    @RequestMapping(method = RequestMethod.PUT, value = "/{idMateria}")
+    public ResponseObject Update(@PathVariable("idMateria") Integer idMateria, @RequestBody Materia materiaObj) {
+        response = new ResponseObject();
+        Materia materia;
+        currentDate = new Date();
+
+        try {
+            if (materiaObj != null) {
+                materiaObj.setIdMateria(idMateria);
+                response.setRequest(materiaObj);
+
+                materia = materiaRepository.findByMateriaIdInAndDeletedIn(idMateria, false);
+
+                if (materia != null)
+
+                {
+
+                    materia.setIdMateria(materiaObj.getIdMateria());
+                    materia.setNombre(materiaObj.getNombre());
+                    materia.setCodigo(materiaObj.getCodigo());
+                    materia.setAula(materiaObj.getAula());
+                    materia.setCarrera(materiaObj.getCarrera());
+                    materia.setCosto(materiaObj.getCosto());
+                    materia.setCreditos(materiaObj.getCreditos());
+                    materia.setDeleted(false);
+                    materia.setCreationDate(materiaObj.getCreationDate());
+                    materia.setUpdatedBy(materiaObj.getUpdatedBy());
+                    materia.setUpdatedDate(currentDate);
+                    materia.setCreatedBy(materiaObj.getCreatedBy());
+
+
+                    materiaRepository.save(materia);
+
+                    response.setResponse(materiaObj);
+                } else {
+                    throw new Exception(Constants.itemNotFound);
+                }
+            }
+        } catch (Exception e) {
+            response.setMessage(e.getMessage());
+            response.setHttpStatus(Constants.badRequest);
+        }
+
+        return response;
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{idMateria}")
+    public ResponseObject Delete(@PathVariable("idMateria") Integer idMateria) {
+
+        ResponseObject response = new ResponseObject();
+        Materia materiaStored;
+        try {
+            response.setRequest(idMateria);
+            materiaStored = materiaRepository.findOne(idMateria);
+
+            if (materiaStored != null) {
+                materiaStored.setDeleted(true);
+                materiaStored.setUpdatedDate(new Date());
+                materiaRepository.save(materiaStored);
+                response.setResponse(Constants.itemDeleted);
+            } else {
+                throw new Exception(Constants.itemNotFound);
+            }
+        } catch (Exception e) {
+            response.setMessage(e.getMessage());
+            response.setHttpStatus(Constants.badRequest);
+        }
+        return response;
     }
 }

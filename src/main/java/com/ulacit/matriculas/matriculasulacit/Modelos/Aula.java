@@ -27,7 +27,6 @@ public class Aula {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_aula")
     public Integer getIdAula() {
         return idAula;
     }

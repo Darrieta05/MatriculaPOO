@@ -80,7 +80,7 @@ public class AlumnoController {
         }
 
         return response;
-    }
+    } 
 
     /*@ApiOperation(value = "Modifica la información de un alumno")*/
     @RequestMapping(method = RequestMethod.PUT, value = "/{alumnoId}")

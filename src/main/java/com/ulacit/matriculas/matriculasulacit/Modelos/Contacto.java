@@ -62,6 +62,8 @@ public class Contacto {
         this.descripcion = descripcion;
     }
 
+    @ManyToOne(cascade=CascadeType.MERGE)
+    @JoinColumn(name="idPersona")
     public Persona getPersona() {
         return persona;
     }

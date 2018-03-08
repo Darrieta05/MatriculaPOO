@@ -40,6 +40,8 @@ public class DetalleMatricula {
         this.idDetalleMatricula = idDetalleMatricula;
     }
 
+    @ManyToOne(cascade=CascadeType.MERGE)
+    @JoinColumn(name="idMatricula")
     public Matricula getMatricula() {
         return matricula;
     }
@@ -48,6 +50,8 @@ public class DetalleMatricula {
         this.matricula = matricula;
     }
 
+    @ManyToOne(cascade=CascadeType.MERGE)
+    @JoinColumn(name="idMateria")
     public Materia getMateria() {
         return materia;
     }

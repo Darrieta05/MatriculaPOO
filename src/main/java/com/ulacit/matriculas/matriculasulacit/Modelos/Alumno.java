@@ -28,7 +28,7 @@ public class Alumno extends Persona {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getAlumnoId() {
         return alumnoId;
     }
@@ -77,6 +77,8 @@ public class Alumno extends Persona {
         this.updatedBy = updatedBy;
     }
 
+    @ManyToOne(cascade=CascadeType.MERGE)
+    @JoinColumn(name="idCarrera")
     public Carrera getCarrera() {
         return carrera;
     }
@@ -84,7 +86,7 @@ public class Alumno extends Persona {
     public void setCarrera(Carrera carrera) {
         this.carrera = carrera;
     }
-
+    
     public String getBeca() {
         return Beca;
     }

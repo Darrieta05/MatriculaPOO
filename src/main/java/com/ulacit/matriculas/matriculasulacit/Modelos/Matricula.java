@@ -39,7 +39,8 @@ public class Matricula {
         this.idMatricula = idMatricula;
     }
 
-
+    @ManyToOne(cascade=CascadeType.MERGE)
+    @JoinColumn(name="idUsuario")
     public Usuario getUsuario() {
         return usuario;
     }
@@ -48,6 +49,8 @@ public class Matricula {
         this.usuario = usuario;
     }
 
+    @ManyToOne(cascade=CascadeType.MERGE)
+    @JoinColumn(name="idAlumno")
     public Alumno getAlumno() {
         return alumno;
     }

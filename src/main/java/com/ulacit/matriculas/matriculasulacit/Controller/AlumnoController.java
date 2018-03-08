@@ -99,6 +99,7 @@ public class AlumnoController {
                 if (alumno != null)
 
                 {
+                    alumno.setAlumnoId(alumnoObj.getAlumnoId());
                     alumno.setBeca(alumnoObj.getBeca());
                     alumno.setCarrera(alumnoObj.getCarrera());
                     alumno.setDeleted(false);

@@ -32,7 +32,7 @@ public class Materia {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getIdMateria() {
         return idMateria;
     }
@@ -73,7 +73,7 @@ public class Materia {
         this.creditos = creditos;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "idCarrera")
     public Carrera getCarrera() {
         return carrera;
@@ -83,7 +83,7 @@ public class Materia {
         this.carrera = carrera;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "idAula")
     public Aula getAula() {
         return aula;

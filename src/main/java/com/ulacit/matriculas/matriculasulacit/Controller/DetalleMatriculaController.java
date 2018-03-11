@@ -5,14 +5,14 @@ import com.ulacit.matriculas.matriculasulacit.Modelos.DetalleMatricula;
 import com.ulacit.matriculas.matriculasulacit.Modelos.ResponseObject;
 import com.ulacit.matriculas.matriculasulacit.Repository.DetalleMatriculaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
 
+@CrossOrigin
+@RestController
+@RequestMapping("/api/detalle-matricula")
 public class DetalleMatriculaController {
 
     @Autowired
@@ -44,7 +44,7 @@ public class DetalleMatriculaController {
         response = new ResponseObject();
 
         try {
-            DetalleMatricula detalleMatricula = detalleMatriculaRepository.findByDetalleMatriculaIdInAndDeletedIn(idDetalleMatricula, false);
+            DetalleMatricula detalleMatricula = detalleMatriculaRepository.findByIdDetalleMatriculaInAndDeletedIn(idDetalleMatricula, false);
             response.setResponse(detalleMatricula);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -91,7 +91,7 @@ public class DetalleMatriculaController {
                 detalleObj.setIdDetalleMatricula(idDetalleMatricula);
                 response.setRequest(detalleObj);
 
-                detalleMatricula = detalleMatriculaRepository.findByDetalleMatriculaIdInAndDeletedIn(idDetalleMatricula, false);
+                detalleMatricula = detalleMatriculaRepository.findByIdDetalleMatriculaInAndDeletedIn(idDetalleMatricula, false);
 
                 if (detalleMatricula != null)
 
@@ -122,7 +122,7 @@ public class DetalleMatriculaController {
         return response;
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{idDetalleMatricula}")
+    /*@RequestMapping(method = RequestMethod.DELETE, value = "/{idDetalleMatricula}")
     public ResponseObject Delete(@PathVariable("idDetalleMatricula") Integer idDetalleMatricula) {
 
         ResponseObject response = new ResponseObject();
@@ -144,5 +144,6 @@ public class DetalleMatriculaController {
             response.setHttpStatus(Constants.badRequest);
         }
         return response;
-    }
+    }*/
+
 }

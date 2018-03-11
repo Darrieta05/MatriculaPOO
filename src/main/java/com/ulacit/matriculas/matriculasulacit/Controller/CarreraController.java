@@ -15,6 +15,7 @@ import java.util.List;
 @RequestMapping("/api/carrera")
 public class CarreraController {
 
+
     @Autowired
     CarreraRepository carreraRepository;
 
@@ -44,7 +45,7 @@ public class CarreraController {
         response = new ResponseObject();
 
         try {
-            Carrera carrera = carreraRepository.findByCarreraIdInAndDeletedIn(idCarrera, false);
+            Carrera carrera = carreraRepository.findByIdCarreraInAndDeletedIn(idCarrera, false);
             response.setResponse(carrera);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -91,7 +92,7 @@ public class CarreraController {
                 carreraObj.setIdCarrera(idCarrera);
                 response.setRequest(carreraObj);
 
-                carrera = carreraRepository.findByCarreraIdInAndDeletedIn(idCarrera, false);
+                carrera = carreraRepository.findByIdCarreraInAndDeletedIn(idCarrera, false);
 
                 if (carrera != null)
 
@@ -123,7 +124,7 @@ public class CarreraController {
         return response;
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{idCarrera}")
+   /* @RequestMapping(method = RequestMethod.DELETE, value = "/{idCarrera}")
     public ResponseObject Delete(@PathVariable("idCarrera") Integer idCarrera) {
 
         ResponseObject response = new ResponseObject();
@@ -145,5 +146,5 @@ public class CarreraController {
             response.setHttpStatus(Constants.badRequest);
         }
         return response;
-    }
+    }*/
 }

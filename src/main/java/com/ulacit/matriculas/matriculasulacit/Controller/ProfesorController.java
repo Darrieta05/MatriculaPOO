@@ -1,16 +1,12 @@
 package com.ulacit.matriculas.matriculasulacit.Controller;
 
 import com.ulacit.matriculas.matriculasulacit.Modelos.Constants;
-import com.ulacit.matriculas.matriculasulacit.Modelos.Matricula;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Profesor;
 import com.ulacit.matriculas.matriculasulacit.Modelos.ResponseObject;
-import com.ulacit.matriculas.matriculasulacit.Repository.MatriculaRepository;
 import com.ulacit.matriculas.matriculasulacit.Repository.ProfesorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
 
@@ -48,7 +44,7 @@ public class ProfesorController {
         response = new ResponseObject();
 
         try {
-            Profesor profesor = profesorRepository.findByProfesorIdInAndDeletedIn(idProfesor, false);
+            Profesor profesor = profesorRepository.findByIdProfesorInAndDeletedIn(idProfesor, false);
             response.setResponse(profesor);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -97,7 +93,7 @@ public class ProfesorController {
                 profesorObj.setIdProfesor(idProfesor);
                 response.setRequest(profesorObj);
 
-                profesor = profesorRepository.findByProfesorIdInAndDeletedIn(idProfesor, false);
+                profesor = profesorRepository.findByIdProfesorInAndDeletedIn(idProfesor, false);
 
                 if (profesor != null)
 
@@ -127,7 +123,7 @@ public class ProfesorController {
         return response;
     }
 
-    /*@ApiOperation(value = "Elimina la información de una profesor")*/
+    /* *//*@ApiOperation(value = "Elimina la información de una profesor")*//*
     @RequestMapping(method = RequestMethod.DELETE, value = "/{idProfesor}")
     public ResponseObject Delete(@PathVariable("idProfesor") Integer idProfesor) {
 
@@ -150,5 +146,5 @@ public class ProfesorController {
             response.setHttpStatus(Constants.badRequest);
         }
         return response;
-    }
+    }*/
 }

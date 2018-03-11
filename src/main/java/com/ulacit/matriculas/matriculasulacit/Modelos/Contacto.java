@@ -1,17 +1,25 @@
 package com.ulacit.matriculas.matriculasulacit.Modelos;
 
+import com.ulacit.matriculas.matriculasulacit.Modelos.Persona;
+
 import javax.persistence.*;
 import java.util.Date;
-
 
 @Entity
 public class Contacto {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer idContacto;
     private String nombre;
     private String descripcion;
-    private Persona persona;
     private String tipo;
+
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="idPersona")
+    private Persona persona;
+
+
 
     /*Audit fields*/
     //@JsonFormat(pattern="yyyy-MM-dd@HH:mm:ss.SSSZ")
@@ -28,8 +36,6 @@ public class Contacto {
         super();
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getIdContacto() {
         return idContacto;
     }
@@ -46,14 +52,6 @@ public class Contacto {
         this.nombre = nombre;
     }
 
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
     public String getDescripcion() {
         return descripcion;
     }
@@ -62,14 +60,12 @@ public class Contacto {
         this.descripcion = descripcion;
     }
 
-    @ManyToOne(cascade=CascadeType.MERGE)
-    @JoinColumn(name="idPersona")
-    public Persona getPersona() {
-        return persona;
+    public String getTipo() {
+        return tipo;
     }
 
-    public void setPersona(Persona persona) {
-        this.persona = persona;
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
     public Date getCreationDate() {
@@ -110,5 +106,13 @@ public class Contacto {
 
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public Persona getPersona() {
+        return persona;
+    }
+
+    public void setPersona(Persona persona) {
+        this.persona = persona;
     }
 }

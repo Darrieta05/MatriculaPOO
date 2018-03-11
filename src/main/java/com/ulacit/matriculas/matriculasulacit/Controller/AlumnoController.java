@@ -1,15 +1,13 @@
 package com.ulacit.matriculas.matriculasulacit.Controller;
 
+
 import com.ulacit.matriculas.matriculasulacit.Modelos.Alumno;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Constants;
-import com.ulacit.matriculas.matriculasulacit.Modelos.Matricula;
 import com.ulacit.matriculas.matriculasulacit.Modelos.ResponseObject;
 import com.ulacit.matriculas.matriculasulacit.Repository.AlumnoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
 
@@ -41,14 +39,14 @@ public class AlumnoController {
         return response;
     }
 
-    /*@ApiOperation(value = "Obtiene un alumno filtrándolo por el parámetro alumnoId")*/
-    @RequestMapping(method = RequestMethod.GET, value = "/{alumnoId}")
-    public ResponseObject GetById(@PathVariable("alumnoId") Integer alumnoId) {
+    /*@ApiOperation(value = "Obtiene un alumno filtrándolo por el parámetro idAlumno")*/
+    @RequestMapping(method = RequestMethod.GET, value = "/{idAlumno}")
+    public ResponseObject GetById(@PathVariable("idAula") Integer idAlumno) {
         response = new ResponseObject();
 
         try {
-            Alumno contact = alumnoRepository.findByAlumnoIdInAndDeletedIn(alumnoId, false);
-            response.setResponse(contact);
+            Alumno alumno = alumnoRepository.findByIdAlumnoInAndDeletedIn(idAlumno, false);
+            response.setResponse(alumno);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
             response.setHttpStatus(Constants.badRequest);
@@ -57,7 +55,7 @@ public class AlumnoController {
         return response;
     }
 
-    /*@ApiOperation(value = "Agrega una nueva matricula")*/
+    /*@ApiOperation(value = "Agrega una nueva alumno")*/
     @RequestMapping(method = RequestMethod.POST)
     public ResponseObject Create(@RequestBody Alumno alumnoObj) {
         response = new ResponseObject();
@@ -80,26 +78,26 @@ public class AlumnoController {
         }
 
         return response;
-    } 
+    }
 
     /*@ApiOperation(value = "Modifica la información de un alumno")*/
-    @RequestMapping(method = RequestMethod.PUT, value = "/{alumnoId}")
-    public ResponseObject Update(@PathVariable("alumnoId") Integer alumnoId, @RequestBody Alumno alumnoObj) {
+    @RequestMapping(method = RequestMethod.PUT, value = "/{idAlumno}")
+    public ResponseObject Update(@PathVariable("idAlumno") Integer idAlumno, @RequestBody Alumno alumnoObj) {
         response = new ResponseObject();
         Alumno alumno;
         currentDate = new Date();
 
         try {
             if (alumnoObj != null) {
-                alumnoObj.setAlumnoId(alumnoId);
+                alumnoObj.setIdAlumno(idAlumno);
                 response.setRequest(alumnoObj);
 
-                alumno = alumnoRepository.findByAlumnoIdInAndDeletedIn(alumnoId, false);
+                alumno = alumnoRepository.findByIdAlumnoInAndDeletedIn(idAlumno, false);
 
                 if (alumno != null)
 
                 {
-                    alumno.setAlumnoId(alumnoObj.getAlumnoId());
+                    alumno.setIdAlumno(alumnoObj.getIdAlumno());
                     alumno.setBeca(alumnoObj.getBeca());
                     alumno.setCarrera(alumnoObj.getCarrera());
                     alumno.setDeleted(false);
@@ -124,14 +122,14 @@ public class AlumnoController {
         return response;
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{alumnoId}")
-    public ResponseObject Delete(@PathVariable("alumnoId") Integer alumnoId) {
+    /*@RequestMapping(method = RequestMethod.DELETE, value = "/{idAlumno}")
+    public ResponseObject Delete(@PathVariable("idAlumno") Integer idAlumno) {
 
         ResponseObject response = new ResponseObject();
         Alumno alumnoStored;
         try {
-            response.setRequest(alumnoId);
-            alumnoStored = alumnoRepository.findOne(alumnoId);
+            response.setRequest(idAlumno);
+            alumnoStored = alumnoRepository.findOne(idAlumno);
 
             if (alumnoStored != null) {
                 alumnoStored.setDeleted(true);
@@ -146,6 +144,5 @@ public class AlumnoController {
             response.setHttpStatus(Constants.badRequest);
         }
         return response;
-    }
-
+    }*/
 }

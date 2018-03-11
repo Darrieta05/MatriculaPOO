@@ -7,7 +7,6 @@ import com.ulacit.matriculas.matriculasulacit.Repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-
 import java.util.Date;
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class UsuarioController {
         response = new ResponseObject();
 
         try {
-            Usuario usuario = usuarioRepository.findByUsuarioIdInAndDeletedIn(idUsuario, false);
+            Usuario usuario = usuarioRepository.findByIdUsuarioInAndDeletedIn(idUsuario, false);
             response.setResponse(usuario);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -94,7 +93,7 @@ public class UsuarioController {
                 usuarioObj.setIdUsuario(idUsuario);
                 response.setRequest(usuarioObj);
 
-                usuario = usuarioRepository.findByUsuarioIdInAndDeletedIn(idUsuario, false);
+                usuario = usuarioRepository.findByIdUsuarioInAndDeletedIn(idUsuario, false);
 
                 if (usuario != null)
 
@@ -125,7 +124,7 @@ public class UsuarioController {
         return response;
     }
 
-    /*@ApiOperation(value = "Elimina la información de una usuario")*/
+    /*  *//*@ApiOperation(value = "Elimina la información de una usuario")*//*
     @RequestMapping(method = RequestMethod.DELETE, value = "/{idUsuario}")
     public ResponseObject Delete(@PathVariable("idUsuario") Integer idUsuario) {
 
@@ -148,5 +147,5 @@ public class UsuarioController {
             response.setHttpStatus(Constants.badRequest);
         }
         return response;
-    }
+    }*/
 }

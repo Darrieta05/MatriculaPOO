@@ -1,18 +1,28 @@
 package com.ulacit.matriculas.matriculasulacit.Modelos;
 
+import com.ulacit.matriculas.matriculasulacit.Modelos.Aula;
+import com.ulacit.matriculas.matriculasulacit.Modelos.Carrera;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 public class Materia {
 
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer idMateria;
     private String nombre;
     private String codigo;
     private Double costo;
     private Integer creditos;
+
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="idCarrera")
     private Carrera carrera;
+
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="idAula")
     private Aula aula;
 
     /*Audit fields*/
@@ -30,9 +40,6 @@ public class Materia {
         super();
     }
 
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getIdMateria() {
         return idMateria;
     }
@@ -73,26 +80,6 @@ public class Materia {
         this.creditos = creditos;
     }
 
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "idCarrera")
-    public Carrera getCarrera() {
-        return carrera;
-    }
-
-    public void setCarrera(Carrera carrera) {
-        this.carrera = carrera;
-    }
-
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "idAula")
-    public Aula getAula() {
-        return aula;
-    }
-
-    public void setAula(Aula aula) {
-        this.aula = aula;
-    }
-
     public Date getCreationDate() {
         return creationDate;
     }
@@ -131,5 +118,21 @@ public class Materia {
 
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public Carrera getCarrera() {
+        return carrera;
+    }
+
+    public void setCarrera(Carrera carrera) {
+        this.carrera = carrera;
+    }
+
+    public Aula getAula() {
+        return aula;
+    }
+
+    public void setAula(Aula aula) {
+        this.aula = aula;
     }
 }

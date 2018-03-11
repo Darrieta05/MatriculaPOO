@@ -1,11 +1,16 @@
 package com.ulacit.matriculas.matriculasulacit.Modelos;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Date;
 
 @Entity
-public class Profesor extends Persona {
+public class Profesor {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int idProfesor;
     private String especialidad;
 
@@ -23,8 +28,6 @@ public class Profesor extends Persona {
         super();
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getIdProfesor() {
         return idProfesor;
     }

@@ -1,12 +1,16 @@
 package com.ulacit.matriculas.matriculasulacit.Modelos;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Date;
 
-
 @Entity
-public abstract class Persona {
+public class Persona {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer idPersona;
     private Integer cedula;
     private String nombre;
@@ -28,8 +32,6 @@ public abstract class Persona {
         super();
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getIdPersona() {
         return idPersona;
     }
@@ -45,7 +47,6 @@ public abstract class Persona {
     public void setCedula(Integer cedula) {
         this.cedula = cedula;
     }
-
 
     public String getNombre() {
         return nombre;
@@ -63,7 +64,6 @@ public abstract class Persona {
         this.apellido = apellido;
     }
 
-
     public Integer getEdad() {
         return edad;
     }
@@ -71,7 +71,6 @@ public abstract class Persona {
     public void setEdad(Integer edad) {
         this.edad = edad;
     }
-
 
     public String getSexo() {
         return sexo;

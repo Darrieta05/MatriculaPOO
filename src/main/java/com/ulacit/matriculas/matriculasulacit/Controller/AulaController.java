@@ -10,12 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 
-
 @CrossOrigin
 @RestController
 @RequestMapping("/api/aula")
 public class AulaController {
-
     @Autowired
     AulaRepository aulaRepository;
 
@@ -45,7 +43,7 @@ public class AulaController {
         response = new ResponseObject();
 
         try {
-            Aula aula = aulaRepository.findByAulaIdInAndDeletedIn(idAula, false);
+            Aula aula = aulaRepository.findByIdAulaInAndDeletedIn(idAula, false);
             response.setResponse(aula);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -92,7 +90,7 @@ public class AulaController {
                 aulaObj.setIdAula(idAula);
                 response.setRequest(aulaObj);
 
-                aula = aulaRepository.findByAulaIdInAndDeletedIn(idAula, false);
+                aula = aulaRepository.findByIdAulaInAndDeletedIn(idAula, false);
 
                 if (aula != null)
 
@@ -123,7 +121,7 @@ public class AulaController {
         return response;
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{idAula}")
+    /*@RequestMapping(method = RequestMethod.DELETE, value = "/{idAula}")
     public ResponseObject Delete(@PathVariable("idAula") Integer idAula) {
 
         ResponseObject response = new ResponseObject();
@@ -145,6 +143,5 @@ public class AulaController {
             response.setHttpStatus(Constants.badRequest);
         }
         return response;
-    }
-
+    }*/
 }

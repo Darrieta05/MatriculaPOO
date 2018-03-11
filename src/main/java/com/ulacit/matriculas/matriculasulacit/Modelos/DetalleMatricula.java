@@ -1,18 +1,24 @@
 package com.ulacit.matriculas.matriculasulacit.Modelos;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import com.ulacit.matriculas.matriculasulacit.Modelos.Materia;
+import com.ulacit.matriculas.matriculasulacit.Modelos.Matricula;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
 public class DetalleMatricula {
-    
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer idDetalleMatricula;
+
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="idMatricula")
     private Matricula matricula;
+
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="idMateria")
     private Materia materia;
 
     /*Audit fields*/
@@ -24,40 +30,18 @@ public class DetalleMatricula {
     private int updatedBy;
     /*@ApiModelProperty(notes = "Indica si el registro se eliminó")*/
     private Boolean deleted = false;
-    
+
     public DetalleMatricula()
     {
         super();
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getIdDetalleMatricula() {
         return idDetalleMatricula;
     }
 
     public void setIdDetalleMatricula(Integer idDetalleMatricula) {
         this.idDetalleMatricula = idDetalleMatricula;
-    }
-
-    @ManyToOne(cascade=CascadeType.MERGE)
-    @JoinColumn(name="idMatricula")
-    public Matricula getMatricula() {
-        return matricula;
-    }
-
-    public void setMatricula(Matricula matricula) {
-        this.matricula = matricula;
-    }
-
-    @ManyToOne(cascade=CascadeType.MERGE)
-    @JoinColumn(name="idMateria")
-    public Materia getMateria() {
-        return materia;
-    }
-
-    public void setMateria(Materia materia) {
-        this.materia = materia;
     }
 
     public Date getCreationDate() {
@@ -99,4 +83,21 @@ public class DetalleMatricula {
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
     }
+
+    public Matricula getMatricula() {
+        return matricula;
+    }
+
+    public void setMatricula(Matricula matricula) {
+        this.matricula = matricula;
+    }
+
+    public Materia getMateria() {
+        return materia;
+    }
+
+    public void setMateria(Materia materia) {
+        this.materia = materia;
+    }
 }
+

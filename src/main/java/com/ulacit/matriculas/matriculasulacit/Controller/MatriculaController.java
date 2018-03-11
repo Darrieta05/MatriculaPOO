@@ -1,10 +1,8 @@
 package com.ulacit.matriculas.matriculasulacit.Controller;
 
 import com.ulacit.matriculas.matriculasulacit.Modelos.Constants;
-import com.ulacit.matriculas.matriculasulacit.Modelos.Materia;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Matricula;
 import com.ulacit.matriculas.matriculasulacit.Modelos.ResponseObject;
-import com.ulacit.matriculas.matriculasulacit.Repository.MateriaRepository;
 import com.ulacit.matriculas.matriculasulacit.Repository.MatriculaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +44,7 @@ public class MatriculaController {
         response = new ResponseObject();
 
         try {
-            Matricula matricula = matriculaRepository.findByMatriculaIdInAndDeletedIn(idMatricula, false);
+            Matricula matricula = matriculaRepository.findByIdMatriculaInAndDeletedIn(idMatricula, false);
             response.setResponse(matricula);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -95,7 +93,7 @@ public class MatriculaController {
                 matriculaObj.setIdMatricula(idMatricula);
                 response.setRequest(matriculaObj);
 
-                matricula = matriculaRepository.findByMatriculaIdInAndDeletedIn(idMatricula, false);
+                matricula = matriculaRepository.findByIdMatriculaInAndDeletedIn(idMatricula, false);
 
                 if (matricula != null)
 
@@ -129,7 +127,7 @@ public class MatriculaController {
         return response;
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{idMatricula}")
+   /* @RequestMapping(method = RequestMethod.DELETE, value = "/{idMatricula}")
     public ResponseObject Delete(@PathVariable("idMatricula") Integer idMatricula) {
 
         ResponseObject response = new ResponseObject();
@@ -151,5 +149,5 @@ public class MatriculaController {
             response.setHttpStatus(Constants.badRequest);
         }
         return response;
-    }
+    }*/
 }

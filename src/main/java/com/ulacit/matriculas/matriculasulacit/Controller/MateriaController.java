@@ -44,7 +44,7 @@ public class MateriaController {
         response = new ResponseObject();
 
         try {
-            Materia materia = materiaRepository.findByMateriaIdInAndDeletedIn(idMateria, false);
+            Materia materia = materiaRepository.findByIdMateriaInAndDeletedIn(idMateria, false);
             response.setResponse(materia);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -91,7 +91,7 @@ public class MateriaController {
                 materiaObj.setIdMateria(idMateria);
                 response.setRequest(materiaObj);
 
-                materia = materiaRepository.findByMateriaIdInAndDeletedIn(idMateria, false);
+                materia = materiaRepository.findByIdMateriaInAndDeletedIn(idMateria, false);
 
                 if (materia != null)
 
@@ -126,7 +126,7 @@ public class MateriaController {
         return response;
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{idMateria}")
+  /*  @RequestMapping(method = RequestMethod.DELETE, value = "/{idMateria}")
     public ResponseObject Delete(@PathVariable("idMateria") Integer idMateria) {
 
         ResponseObject response = new ResponseObject();
@@ -148,5 +148,5 @@ public class MateriaController {
             response.setHttpStatus(Constants.badRequest);
         }
         return response;
-    }
+    }*/
 }

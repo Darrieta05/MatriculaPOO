@@ -1,13 +1,19 @@
 package com.ulacit.matriculas.matriculasulacit.Modelos;
 
+import com.ulacit.matriculas.matriculasulacit.Modelos.Carrera;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-public class Alumno extends Persona {
+public class Alumno {
 
-    private int alumnoId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int idAlumno;
 
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="idCarrera")
     private Carrera carrera;
     private String Beca;
 
@@ -27,26 +33,32 @@ public class Alumno extends Persona {
         super();
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public int getAlumnoId() {
-        return alumnoId;
+    public int getIdAlumno() {
+        return idAlumno;
     }
 
-    public void setAlumnoId(int alumnoId) {
-        this.alumnoId = alumnoId;
+    public void setIdAlumno(int idAlumno) {
+        this.idAlumno = idAlumno;
+    }
+
+    public Carrera getCarrera() {
+        return carrera;
+    }
+
+    public void setCarrera(Carrera carrera) {
+        this.carrera = carrera;
+    }
+
+    public String getBeca() {
+        return Beca;
+    }
+
+    public void setBeca(String beca) {
+        Beca = beca;
     }
 
     public Date getCreationDate() {
         return creationDate;
-    }
-
-    public Boolean getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
     }
 
     public void setCreationDate(Date creationDate) {
@@ -77,21 +89,11 @@ public class Alumno extends Persona {
         this.updatedBy = updatedBy;
     }
 
-    @ManyToOne(cascade=CascadeType.MERGE)
-    @JoinColumn(name="idCarrera")
-    public Carrera getCarrera() {
-        return carrera;
+    public Boolean getDeleted() {
+        return deleted;
     }
 
-    public void setCarrera(Carrera carrera) {
-        this.carrera = carrera;
-    }
-    
-    public String getBeca() {
-        return Beca;
-    }
-
-    public void setBeca(String Beca) {
-        this.Beca = Beca;
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 }

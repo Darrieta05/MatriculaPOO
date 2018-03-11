@@ -1,6 +1,8 @@
 package com.ulacit.matriculas.matriculasulacit.Controller;
 
-import com.ulacit.matriculas.matriculasulacit.Modelos.*;
+import com.ulacit.matriculas.matriculasulacit.Modelos.Constants;
+import com.ulacit.matriculas.matriculasulacit.Modelos.Contacto;
+import com.ulacit.matriculas.matriculasulacit.Modelos.ResponseObject;
 import com.ulacit.matriculas.matriculasulacit.Repository.ContactoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +44,7 @@ public class ContactoController {
         response = new ResponseObject();
 
         try {
-            Contacto contacto = contactoRepository.findByContactoIdInAndDeletedIn(idContacto, false);
+            Contacto contacto = contactoRepository.findByIdContactoInAndDeletedIn(idContacto, false);
             response.setResponse(contacto);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -89,7 +91,7 @@ public class ContactoController {
                 contactoObj.setIdContacto(idContacto);
                 response.setRequest(contactoObj);
 
-                contacto = contactoRepository.findByContactoIdInAndDeletedIn(idContacto, false);
+                contacto = contactoRepository.findByIdContactoInAndDeletedIn(idContacto, false);
 
                 if (contacto != null)
 
@@ -122,7 +124,7 @@ public class ContactoController {
         return response;
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{idContacto}")
+ /*   @RequestMapping(method = RequestMethod.DELETE, value = "/{idContacto}")
     public ResponseObject Delete(@PathVariable("idContacto") Integer idContacto) {
 
         ResponseObject response = new ResponseObject();
@@ -144,6 +146,5 @@ public class ContactoController {
             response.setHttpStatus(Constants.badRequest);
         }
         return response;
-    }
-
+    }*/
 }

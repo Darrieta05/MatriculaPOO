@@ -1,18 +1,29 @@
 package com.ulacit.matriculas.matriculasulacit.Modelos;
 
-import java.util.Date;
-import javax.persistence.*;
+import com.ulacit.matriculas.matriculasulacit.Modelos.Alumno;
+import com.ulacit.matriculas.matriculasulacit.Modelos.Usuario;
 
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class Matricula {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer idMatricula;
-    private Usuario usuario;
-    private Alumno alumno;
     private Date fecha;
     private Double monto;
     private Double total;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "idAlumno")
+    private Alumno alumno;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "idUsuario")
+    private Usuario usuario;
+
 
     /*Audit fields*/
     //@JsonFormat(pattern="yyyy-MM-dd@HH:mm:ss.SSSZ")
@@ -28,35 +39,12 @@ public class Matricula {
         super();
     }
 
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getIdMatricula() {
         return idMatricula;
     }
 
     public void setIdMatricula(Integer idMatricula) {
         this.idMatricula = idMatricula;
-    }
-
-    @ManyToOne(cascade=CascadeType.MERGE)
-    @JoinColumn(name="idUsuario")
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    @ManyToOne(cascade=CascadeType.MERGE)
-    @JoinColumn(name="idAlumno")
-    public Alumno getAlumno() {
-        return alumno;
-    }
-
-    public void setAlumno(Alumno alumno) {
-        this.alumno = alumno;
     }
 
     public Date getFecha() {
@@ -121,5 +109,21 @@ public class Matricula {
 
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public Alumno getAlumno() {
+        return alumno;
+    }
+
+    public void setAlumno(Alumno alumno) {
+        this.alumno = alumno;
     }
 }

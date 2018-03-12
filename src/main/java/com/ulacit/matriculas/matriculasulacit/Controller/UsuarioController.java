@@ -1,74 +1,152 @@
 package com.ulacit.matriculas.matriculasulacit.Controller;
 
+
+import com.ulacit.matriculas.matriculasulacit.Modelos.Constante;
+import com.ulacit.matriculas.matriculasulacit.Modelos.Response;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Usuario;
 import com.ulacit.matriculas.matriculasulacit.Repository.UsuarioRepository;
-import org.apache.coyote.Response;
-import org.omg.CORBA.portable.ResponseHandler;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.encrypt.TextEncryptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import sun.security.provider.certpath.OCSPResponse;
 
-import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 
+@CrossOrigin
+@RestController
+@RequestMapping("/api/usuario")
 public class UsuarioController {
+    
+    @Autowired
     UsuarioRepository usuarioRepository;
 
-    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private Response response;
+    private Date currentDate;
 
-    @GetMapping("/usuario")
-    public List<Usuario> getAllAula() {
 
-        return usuarioRepository.findAll();
-    }
+    /*@ApiOperation(value = "Retorna el listado de todas las usuario")*/
+    @RequestMapping(method = RequestMethod.GET)
+    public Response GetAll() {
+        response = new Response();
 
-    @PostMapping("/usuario")
-    public Usuario createAula(@Valid @RequestBody Usuario usuario) {
-        return usuarioRepository.save(usuario);
-    }
-
-    @GetMapping("/usuario/{id}")
-    public ResponseEntity<Usuario> getAulaById(@PathVariable(value = "id") Integer usuarioId) {
-        Usuario usuario = usuarioRepository.findOne(usuarioId);
-        if (usuario == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok().body(usuario);
-    }
-
-    @PutMapping("/usuario/{id}")
-    public ResponseEntity<Usuario> updateUsuario(@PathVariable(value = "id") Integer usuarioId,
-                                           @RequestBody Usuario usuarioDetails) {
-        Usuario usuario = usuarioRepository.findOne(usuarioId);
-        if (usuario == null) return ResponseEntity.notFound().build();
-
-        usuario.setClave(passwordEncoder.encode(passwordEncoder.encode(usuarioDetails.getClave())));
-        usuario.setNombre(usuarioDetails.getNombre());
-        Usuario updatedUsuario = usuarioRepository.save(usuario);
-
-        return ResponseEntity.ok(updatedUsuario);
-    }
-
-    @DeleteMapping("/usuario/{id}")
-    public ResponseEntity<Usuario> deleteAula(@PathVariable(value = "id") Integer usuarioId) {
-        Usuario aula = usuarioRepository.findOne(usuarioId);
-        if (aula == null) return ResponseEntity.notFound().build();
-
-        usuarioRepository.delete(aula);
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/login")
-    public ResponseEntity<Usuario> login(@RequestBody Usuario usuarioDetails) {
-        Usuario usuario = usuarioRepository.findOne(usuarioDetails.getIdUsuario());
-        if (usuario == null) return ResponseEntity.notFound().build();
-
-        if (passwordEncoder.matches(usuarioDetails.getClave(), usuario.getClave())) {
-            return ResponseEntity.ok().body(usuario);
+        try {
+            List<Usuario> listaUsuario = usuarioRepository.findByDeleted(false);
+            response.setResponse(listaUsuario);
+        } catch (Exception e) {
+            response.setMessage(e.getMessage());
+            response.setHttpStatus(Constante.badRequest);
         }
 
-        return ResponseEntity.badRequest().build();
+        return response;
+    }
+
+    /*@ApiOperation(value = "Retorna el matricula filtrando idUsuario")*/
+    @RequestMapping(method = RequestMethod.GET, value = "/{idUsuario}")
+    public Response GetById(@PathVariable("idUsuario") Integer idUsuario) {
+        response = new Response();
+
+        try {
+            Usuario usuario = usuarioRepository.findByIdUsuarioInAndDeletedIn(idUsuario, false);
+            response.setResponse(usuario);
+        } catch (Exception e) {
+            response.setMessage(e.getMessage());
+            response.setHttpStatus(Constante.badRequest);
+        }
+
+        return response;
+    }
+
+
+    /*@ApiOperation(value = "Agrega una nueva usuario")*/
+    @RequestMapping(method = RequestMethod.POST)
+    public Response Create(@RequestBody Usuario usuarioObj) {
+        response = new Response();
+
+        try {
+            if (usuarioObj != null) {
+                response.setRequest(usuarioObj);
+
+                usuarioObj.setUpdatedBy(usuarioObj.getCreatedBy());
+                usuarioObj.setCreationDate(currentDate);
+                usuarioObj.setUpdatedDate(currentDate);
+                usuarioObj.setDeleted(false);
+
+                usuarioRepository.save(usuarioObj);
+                response.setResponse(usuarioObj);
+            }
+        } catch (Exception e) {
+            response.setMessage(e.getMessage());
+            response.setHttpStatus(Constante.badRequest);
+        }
+
+        return response;
+    }
+
+
+    /*@ApiOperation(value = "Modifica la información de una usuario")*/
+    @RequestMapping(method = RequestMethod.PUT, value = "/{idUsuario}")
+    public Response Update(@PathVariable("idUsuario") Integer idUsuario, @RequestBody Usuario usuarioObj) {
+        response = new Response();
+        Usuario usuario;
+        currentDate = new Date();
+
+        try {
+            if (usuarioObj != null) {
+                usuarioObj.setIdUsuario(idUsuario);
+                response.setRequest(usuarioObj);
+
+                usuario = usuarioRepository.findByIdUsuarioInAndDeletedIn(idUsuario, false);
+
+                if (usuario != null)
+
+                {
+
+                    usuario.setIdUsuario(usuarioObj.getIdUsuario());
+                    usuario.setNombre(usuarioObj.getNombre());
+                    usuario.setClave(usuarioObj.getClave());
+                    usuario.setDeleted(false);
+                    usuario.setCreationDate(usuarioObj.getCreationDate());
+                    usuario.setUpdatedBy(usuarioObj.getUpdatedBy());
+                    usuario.setUpdatedDate(currentDate);
+                    usuario.setCreatedBy(usuarioObj.getCreatedBy());
+
+
+                    usuarioRepository.save(usuario);
+                    response.setResponse(usuarioObj);
+
+                } else {
+                    throw new Exception(Constante.itemNotFound);
+                }
+            }
+        } catch (Exception e) {
+            response.setMessage(e.getMessage());
+            response.setHttpStatus(Constante.badRequest);
+        }
+
+        return response;
+    }
+
+    //@ApiOperation(value = "Elimina la información de una usuario")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{idUsuario}")
+    public Response Delete(@PathVariable("idUsuario") Integer idUsuario) {
+
+        Response response = new Response();
+        Usuario usuarioStored;
+        try {
+            response.setRequest(idUsuario);
+            usuarioStored = usuarioRepository.findByIdUsuarioInAndDeletedIn(idUsuario, false);
+
+            if (usuarioStored != null) {
+                usuarioStored.setDeleted(true);
+                usuarioStored.setUpdatedDate(new Date());
+                usuarioRepository.save(usuarioStored);
+                response.setResponse(Constante.itemDeleted);
+            } else {
+                throw new Exception(Constante.itemNotFound);
+            }
+        } catch (Exception e) {
+            response.setMessage(e.getMessage());
+            response.setHttpStatus(Constante.badRequest);
+        }
+        return response;
     }
 }

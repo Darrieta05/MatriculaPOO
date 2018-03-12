@@ -1,17 +1,17 @@
 package com.ulacit.matriculas.matriculasulacit.Modelos;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import java.util.Date;
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "Persona")
-@EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(allowGetters = true, allowSetters = true)
-public abstract class Persona {
+//@Inheritance(strategy= InheritanceType.JOINED)
+//@DiscriminatorColumn(name="PERSON_TYPE", length=10, discriminatorType= DiscriminatorType.STRING)
+public class Persona{
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idPersona;
     private Integer cedula;
     private String nombre;
@@ -19,25 +19,20 @@ public abstract class Persona {
     private Integer edad;
     private String sexo;
 
+    /*Audit fields*/
+    //@JsonFormat(pattern="yyyy-MM-dd@HH:mm:ss.SSSZ")
+    private Date creationDate;
+    //@JsonFormat(pattern="yyyy-MM-dd@HH:mm:ss.SSSZ")
+    private Date updatedDate;
+    private int createdBy;
+    private int updatedBy;
+    /*@ApiModelProperty(notes = "Indica si el registro se eliminó")*/
+    private Boolean deleted = false;
 
-    public Persona() {
+    public Persona(){
         super();
     }
-
-    @Override
-    public String toString() {
-        return "Persona{" +
-                "idPersona=" + idPersona +
-                ", cedula=" + cedula +
-                ", nombre='" + nombre + '\'' +
-                ", apellido='" + apellido + '\'' +
-                ", edad=" + edad +
-                ", sexo='" + sexo + '\'' +
-                '}';
-    }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    
     public Integer getIdPersona() {
         return idPersona;
     }
@@ -46,8 +41,6 @@ public abstract class Persona {
         this.idPersona = idPersona;
     }
 
-    @Column(name = "cedula")
-    @NotNull
     public Integer getCedula() {
         return cedula;
     }
@@ -56,8 +49,6 @@ public abstract class Persona {
         this.cedula = cedula;
     }
 
-    @Column(name = "nombre")
-    @NotNull
     public String getNombre() {
         return nombre;
     }
@@ -65,7 +56,7 @@ public abstract class Persona {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    @Column(name = "apellido")
+
     public String getApellido() {
         return apellido;
     }
@@ -74,7 +65,6 @@ public abstract class Persona {
         this.apellido = apellido;
     }
 
-    @Column(name = "edad")
     public Integer getEdad() {
         return edad;
     }
@@ -83,12 +73,51 @@ public abstract class Persona {
         this.edad = edad;
     }
 
-    @Column(name = "sexo")
     public String getSexo() {
         return sexo;
     }
 
     public void setSexo(String sexo) {
         this.sexo = sexo;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Date getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+
+    public int getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(int createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public int getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(int updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 }

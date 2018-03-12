@@ -1,11 +1,12 @@
 package com.ulacit.matriculas.matriculasulacit.Repository;
 
 import com.ulacit.matriculas.matriculasulacit.Modelos.Alumno;
+import com.ulacit.matriculas.matriculasulacit.Modelos.Alumno_Id;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface AlumnoRepository extends JpaRepository<Alumno, Integer>, JpaSpecificationExecutor<Alumno>{
-    
+
+public interface AlumnoRepository extends JpaRepository<Alumno, Long> {
+    List<Alumno> findByDeleted(Boolean deleted);
+    Alumno findByIdAlumnoInAndDeletedIn(Alumno_Id idAlumno, Boolean deleted);
 }

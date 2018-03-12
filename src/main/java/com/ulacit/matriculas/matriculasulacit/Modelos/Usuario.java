@@ -1,39 +1,35 @@
 package com.ulacit.matriculas.matriculasulacit.Modelos;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.util.Date;
 
 @Entity
-@Table(name = "Usuario")
-@EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(allowGetters = true, allowSetters = true)
-
 public class Usuario {
-    
-    private Integer idUsuario;
-    private String Nombre;
-    private String Clave;
-    
-    public Usuario()
-    {
-        super();
-    }
-    
-    @Override
-    public String toString() {
-        return  "Usuario{" +
-                "idUsuario=" + idUsuario +
-                ", nombre='" + Nombre + '\'' +
-                ", clave='" + Clave + '\'' +
-                '}';
-    }
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer idUsuario;
+    private String nombre;
+    private String clave;
+
+    /*Audit fields*/
+    //@JsonFormat(pattern="yyyy-MM-dd@HH:mm:ss.SSSZ")
+    private Date creationDate;
+    //@JsonFormat(pattern="yyyy-MM-dd@HH:mm:ss.SSSZ")
+    private Date updatedDate;
+    private int createdBy;
+    private int updatedBy;
+    /*@ApiModelProperty(notes = "Indica si el registro se eliminó")*/
+    private Boolean deleted = false;
+
+
+    public Usuario() {
+        super();
+    }
+
     public Integer getIdUsuario() {
         return idUsuario;
     }
@@ -41,22 +37,60 @@ public class Usuario {
     public void setIdUsuario(Integer idUsuario) {
         this.idUsuario = idUsuario;
     }
-    
-    @Column(name = "nombre")
+
     public String getNombre() {
-        return Nombre;
+        return nombre;
     }
 
-    public void setNombre(String Nombre) {
-        this.Nombre = Nombre;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
-    
-    @Column(name = "clave")
+
     public String getClave() {
-        return Clave;
+        return clave;
     }
 
-    public void setClave(String Clave) {
-        this.Clave = Clave;
+    public void setClave(String clave) {
+        this.clave = clave;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Date getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+
+    public int getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(int createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public int getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(int updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 }

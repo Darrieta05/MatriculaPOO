@@ -13,8 +13,7 @@ public class Matricula {
     private Double monto;
     private Double total;
 
-    /*@ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "idAlumno")*/
+
     @ManyToOne
     @JoinColumns({
         @JoinColumn(

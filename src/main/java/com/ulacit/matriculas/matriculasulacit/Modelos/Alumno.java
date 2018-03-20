@@ -5,20 +5,10 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-//@DiscriminatorValue("Alumno")
 public class Alumno implements Serializable{
     
     @EmbeddedId
     private Alumno_Id idAlumno;
-    
-    /*
-    @Id
-    private Integer idAlumno;
-    @Id
-    @ManyToOne(cascade=CascadeType.ALL)  
-    @PrimaryKeyJoinColumn(referencedColumnName = "idPersona")
-    private Persona persona;
-    */
     
     @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name="idCarrera")
@@ -48,24 +38,6 @@ public class Alumno implements Serializable{
     public void setIdAlumno(Alumno_Id idAlumno) {
         this.idAlumno = idAlumno;
     }
-    
-    /*
-    public Integer getIdAlumno() {
-        return idAlumno;
-    }
-
-    public void setIdAlumno(Integer idAlumno) {
-        this.idAlumno = idAlumno;
-    }
-
-    public Persona getPersona() {
-        return persona;
-    }
-
-    public void setPersona(Persona persona) {
-        this.persona = persona;
-    }
-    */
     
     public Carrera getCarrera() {
         return carrera;

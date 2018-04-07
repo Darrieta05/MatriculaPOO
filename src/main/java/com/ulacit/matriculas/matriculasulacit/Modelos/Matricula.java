@@ -13,6 +13,17 @@ public class Matricula {
     private Double monto;
     private Double total;
 
+    /*Audit fields*/
+    //@JsonFormat(pattern="yyyy-MM-dd@HH:mm:ss.SSSZ")
+    private Date creationDate;
+    //@JsonFormat(pattern="yyyy-MM-dd@HH:mm:ss.SSSZ")
+    private Date updatedDate;
+    private int createdBy;
+    private int updatedBy;
+    /*@ApiModelProperty(notes = "Indica si el registro se eliminó")*/
+    private Boolean deleted = false;
+
+
 
     @ManyToOne
     @JoinColumns({
@@ -28,17 +39,6 @@ public class Matricula {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idUsuario")
     private Usuario usuario;
-
-
-    /*Audit fields*/
-    //@JsonFormat(pattern="yyyy-MM-dd@HH:mm:ss.SSSZ")
-    private Date creationDate;
-    //@JsonFormat(pattern="yyyy-MM-dd@HH:mm:ss.SSSZ")
-    private Date updatedDate;
-    private int createdBy;
-    private int updatedBy;
-    /*@ApiModelProperty(notes = "Indica si el registro se eliminó")*/
-    private Boolean deleted = false;
 
     public Matricula() {
         super();
@@ -74,6 +74,22 @@ public class Matricula {
 
     public void setTotal(Double total) {
         this.total = total;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public Alumno getAlumno() {
+        return alumno;
+    }
+
+    public void setAlumno(Alumno alumno) {
+        this.alumno = alumno;
     }
 
     public Date getCreationDate() {
@@ -114,21 +130,5 @@ public class Matricula {
 
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    public Alumno getAlumno() {
-        return alumno;
-    }
-
-    public void setAlumno(Alumno alumno) {
-        this.alumno = alumno;
     }
 }

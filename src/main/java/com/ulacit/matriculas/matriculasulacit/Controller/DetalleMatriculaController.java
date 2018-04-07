@@ -7,7 +7,6 @@ import com.ulacit.matriculas.matriculasulacit.Repository.DetalleMatriculaReposit
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
@@ -19,8 +18,6 @@ public class DetalleMatriculaController {
     DetalleMatriculaRepository detalleMatriculaRepository;
 
     private Response response;
-    private Date currentDate;
-
 
     /* @ApiOperation(value = "Retorna el listado de todas las detalle matricula")*/
     @RequestMapping(method = RequestMethod.GET)
@@ -28,7 +25,7 @@ public class DetalleMatriculaController {
         response = new Response();
 
         try {
-            List<DetalleMatricula> listaDetalleMatricula = detalleMatriculaRepository.findByDeleted(false);
+            List<DetalleMatricula> listaDetalleMatricula = detalleMatriculaRepository.findAll();
             response.setResponse(listaDetalleMatricula);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -44,7 +41,7 @@ public class DetalleMatriculaController {
         response = new Response();
 
         try {
-            DetalleMatricula detalleMatricula = detalleMatriculaRepository.findByIdDetalleMatriculaInAndDeletedIn(idDetalleMatricula, false);
+            DetalleMatricula detalleMatricula = detalleMatriculaRepository.findOne(idDetalleMatricula);
             response.setResponse(detalleMatricula);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -63,11 +60,6 @@ public class DetalleMatriculaController {
             if (detalleObj != null) {
                 response.setRequest(detalleObj);
 
-                detalleObj.setUpdatedBy(detalleObj.getCreatedBy());
-                detalleObj.setCreationDate(currentDate);
-                detalleObj.setUpdatedDate(currentDate);
-                detalleObj.setDeleted(false);
-
                 detalleMatriculaRepository.save(detalleObj);
                 response.setResponse(detalleObj);
             }
@@ -83,33 +75,23 @@ public class DetalleMatriculaController {
     @RequestMapping(method = RequestMethod.PUT, value = "/{idDetalleMatricula}")
     public Response Update(@PathVariable("idDetalleMatricula") Integer idDetalleMatricula, @RequestBody DetalleMatricula detalleObj) {
         response = new Response();
-        DetalleMatricula detalleMatricula;
-        currentDate = new Date();
+        DetalleMatricula detalleMatriculaStored;
 
         try {
             if (detalleObj != null) {
                 detalleObj.setIdDetalleMatricula(idDetalleMatricula);
+
                 response.setRequest(detalleObj);
 
-                detalleMatricula = detalleMatriculaRepository.findByIdDetalleMatriculaInAndDeletedIn(idDetalleMatricula, false);
+                detalleMatriculaStored = detalleMatriculaRepository.findOne(idDetalleMatricula);
 
-                if (detalleMatricula != null)
+                if (detalleMatriculaStored != null) {
+                    detalleObj.setIdDetalleMatricula(detalleMatriculaStored.getIdDetalleMatricula());
+                    response.setRequest(detalleObj);
 
-                {
-
-                    detalleMatricula.setIdDetalleMatricula(detalleObj.getIdDetalleMatricula());
-                    detalleMatricula.setMateria(detalleObj.getMateria());
-                    detalleMatricula.setMatricula(detalleObj.getMatricula());
-                    detalleMatricula.setDeleted(false);
-                    detalleMatricula.setCreationDate(detalleObj.getCreationDate());
-                    detalleMatricula.setUpdatedBy(detalleObj.getUpdatedBy());
-                    detalleMatricula.setUpdatedDate(currentDate);
-                    detalleMatricula.setCreatedBy(detalleObj.getCreatedBy());
-
-
-                    detalleMatriculaRepository.save(detalleMatricula);
-
+                    detalleMatriculaRepository.save(detalleObj);
                     response.setResponse(detalleObj);
+
                 } else {
                     throw new Exception(Constante.itemNotFound);
                 }
@@ -121,7 +103,6 @@ public class DetalleMatriculaController {
 
         return response;
     }
-
     @RequestMapping(method = RequestMethod.DELETE, value = "/{idDetalleMatricula}")
     public Response Delete(@PathVariable("idDetalleMatricula") Integer idDetalleMatricula) {
 
@@ -129,12 +110,10 @@ public class DetalleMatriculaController {
         DetalleMatricula detalleStored;
         try {
             response.setRequest(idDetalleMatricula);
-            detalleStored = detalleMatriculaRepository.findByIdDetalleMatriculaInAndDeletedIn(idDetalleMatricula, false);
+            detalleStored = detalleMatriculaRepository.findOne(idDetalleMatricula);
 
             if (detalleStored != null) {
-                detalleStored.setDeleted(true);
-                detalleStored.setUpdatedDate(new Date());
-                detalleMatriculaRepository.save(detalleStored);
+                detalleMatriculaRepository.delete(detalleStored);
                 response.setResponse(Constante.itemDeleted);
             } else {
                 throw new Exception(Constante.itemNotFound);

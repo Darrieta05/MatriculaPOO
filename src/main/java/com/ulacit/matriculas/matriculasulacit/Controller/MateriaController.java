@@ -7,7 +7,6 @@ import com.ulacit.matriculas.matriculasulacit.Repository.MateriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
@@ -19,8 +18,6 @@ public class MateriaController {
     MateriaRepository materiaRepository;
 
     private Response response;
-    private Date currentDate;
-
 
     /* @ApiOperation(value = "Retorna el listado de todas las materias")*/
     @RequestMapping(method = RequestMethod.GET)
@@ -28,7 +25,7 @@ public class MateriaController {
         response = new Response();
 
         try {
-            List<Materia> listaMateria = materiaRepository.findByDeleted(false);
+            List<Materia> listaMateria = materiaRepository.findAll();
             response.setResponse(listaMateria);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -44,7 +41,7 @@ public class MateriaController {
         response = new Response();
 
         try {
-            Materia materia = materiaRepository.findByIdMateriaInAndDeletedIn(idMateria, false);
+            Materia materia = materiaRepository.findOne(idMateria);
             response.setResponse(materia);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -63,11 +60,6 @@ public class MateriaController {
             if (materiaObj != null) {
                 response.setRequest(materiaObj);
 
-                materiaObj.setUpdatedBy(materiaObj.getCreatedBy());
-                materiaObj.setCreationDate(currentDate);
-                materiaObj.setUpdatedDate(currentDate);
-                materiaObj.setDeleted(false);
-
                 materiaRepository.save(materiaObj);
                 response.setResponse(materiaObj);
             }
@@ -83,37 +75,23 @@ public class MateriaController {
     @RequestMapping(method = RequestMethod.PUT, value = "/{idMateria}")
     public Response Update(@PathVariable("idMateria") Integer idMateria, @RequestBody Materia materiaObj) {
         response = new Response();
-        Materia materia;
-        currentDate = new Date();
+        Materia materiaStored;
 
         try {
             if (materiaObj != null) {
                 materiaObj.setIdMateria(idMateria);
+
                 response.setRequest(materiaObj);
 
-                materia = materiaRepository.findByIdMateriaInAndDeletedIn(idMateria, false);
+                materiaStored = materiaRepository.findOne(idMateria);
 
-                if (materia != null)
+                if (materiaStored != null) {
+                    materiaObj.setIdMateria(materiaObj.getIdMateria());
+                    response.setRequest(materiaObj);
 
-                {
-
-                    materia.setIdMateria(materiaObj.getIdMateria());
-                    materia.setNombre(materiaObj.getNombre());
-                    materia.setCodigo(materiaObj.getCodigo());
-                    materia.setAula(materiaObj.getAula());
-                    materia.setCarrera(materiaObj.getCarrera());
-                    materia.setCosto(materiaObj.getCosto());
-                    materia.setCreditos(materiaObj.getCreditos());
-                    materia.setDeleted(false);
-                    materia.setCreationDate(materiaObj.getCreationDate());
-                    materia.setUpdatedBy(materiaObj.getUpdatedBy());
-                    materia.setUpdatedDate(currentDate);
-                    materia.setCreatedBy(materiaObj.getCreatedBy());
-
-
-                    materiaRepository.save(materia);
-
+                    materiaRepository.save(materiaObj);
                     response.setResponse(materiaObj);
+
                 } else {
                     throw new Exception(Constante.itemNotFound);
                 }
@@ -133,12 +111,10 @@ public class MateriaController {
         Materia materiaStored;
         try {
             response.setRequest(idMateria);
-            materiaStored = materiaRepository.findByIdMateriaInAndDeletedIn(idMateria, false);
+            materiaStored = materiaRepository.findOne(idMateria);
 
             if (materiaStored != null) {
-                materiaStored.setDeleted(true);
-                materiaStored.setUpdatedDate(new Date());
-                materiaRepository.save(materiaStored);
+                materiaRepository.delete(materiaStored);
                 response.setResponse(Constante.itemDeleted);
             } else {
                 throw new Exception(Constante.itemNotFound);

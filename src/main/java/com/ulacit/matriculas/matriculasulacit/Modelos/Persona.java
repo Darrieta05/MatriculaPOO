@@ -29,6 +29,7 @@ public class Persona{
     /*@ApiModelProperty(notes = "Indica si el registro se eliminó")*/
     private Boolean deleted = false;
 
+
     public Persona(){
         super();
     }

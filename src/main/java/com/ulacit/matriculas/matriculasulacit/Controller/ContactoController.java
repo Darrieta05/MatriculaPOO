@@ -28,7 +28,7 @@ public class ContactoController {
         response = new Response();
 
         try {
-            List<Contacto> listaContacto = contactoRepository.findByDeleted(false);
+            List<Contacto> listaContacto = contactoRepository.findAll();
             response.setResponse(listaContacto);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -44,7 +44,7 @@ public class ContactoController {
         response = new Response();
 
         try {
-            Contacto contacto = contactoRepository.findByIdContactoInAndDeletedIn(idContacto, false);
+            Contacto contacto = contactoRepository.findOne(idContacto);
             response.setResponse(contacto);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -63,11 +63,6 @@ public class ContactoController {
             if (contactoObj != null) {
                 response.setRequest(contactoObj);
 
-                contactoObj.setUpdatedBy(contactoObj.getCreatedBy());
-                contactoObj.setCreationDate(currentDate);
-                contactoObj.setUpdatedDate(currentDate);
-                contactoObj.setDeleted(false);
-
                 contactoRepository.save(contactoObj);
                 response.setResponse(contactoObj);
             }
@@ -83,35 +78,23 @@ public class ContactoController {
     @RequestMapping(method = RequestMethod.PUT, value = "/{idContacto}")
     public Response Update(@PathVariable("idContacto") Integer idContacto, @RequestBody Contacto contactoObj) {
         response = new Response();
-        Contacto contacto;
-        currentDate = new Date();
+        Contacto contactoStored;
 
         try {
             if (contactoObj != null) {
                 contactoObj.setIdContacto(idContacto);
+
                 response.setRequest(contactoObj);
 
-                contacto = contactoRepository.findByIdContactoInAndDeletedIn(idContacto, false);
+                contactoStored = contactoRepository.findOne(idContacto);
 
-                if (contacto != null)
+                if (contactoStored != null) {
+                    contactoObj.setIdContacto(contactoStored.getIdContacto());
+                    response.setRequest(contactoObj);
 
-                {
-
-                    contacto.setIdContacto(contactoObj.getIdContacto());
-                    contacto.setNombre(contactoObj.getNombre());
-                    contacto.setDescripcion(contactoObj.getDescripcion());
-                    contacto.setPersona(contactoObj.getPersona());
-                    contacto.setTipo(contactoObj.getTipo());
-                    contacto.setDeleted(false);
-                    contacto.setCreationDate(contactoObj.getCreationDate());
-                    contacto.setUpdatedBy(contactoObj.getUpdatedBy());
-                    contacto.setUpdatedDate(currentDate);
-                    contacto.setCreatedBy(contactoObj.getCreatedBy());
-
-
-                    contactoRepository.save(contacto);
-
+                    contactoRepository.save(contactoObj);
                     response.setResponse(contactoObj);
+
                 } else {
                     throw new Exception(Constante.itemNotFound);
                 }
@@ -131,12 +114,10 @@ public class ContactoController {
         Contacto contactoStored;
         try {
             response.setRequest(idContacto);
-            contactoStored = contactoRepository.findByIdContactoInAndDeletedIn(idContacto, false);
+            contactoStored = contactoRepository.findOne(idContacto);
 
             if (contactoStored != null) {
-                contactoStored.setDeleted(true);
-                contactoStored.setUpdatedDate(new Date());
-                contactoRepository.save(contactoStored);
+                contactoRepository.delete(contactoStored);
                 response.setResponse(Constante.itemDeleted);
             } else {
                 throw new Exception(Constante.itemNotFound);

@@ -85,36 +85,29 @@ public class MatriculaController {
     @RequestMapping(method = RequestMethod.PUT, value = "/{idMatricula}")
     public Response Update(@PathVariable("idMatricula") Integer idMatricula, @RequestBody Matricula matriculaObj) {
         response = new Response();
-        Matricula matricula;
+        Matricula matriculaStored;
         currentDate = new Date();
 
         try {
             if (matriculaObj != null) {
                 matriculaObj.setIdMatricula(idMatricula);
+
                 response.setRequest(matriculaObj);
 
-                matricula = matriculaRepository.findByIdMatriculaInAndDeletedIn(idMatricula, false);
+                matriculaStored = matriculaRepository.findOne(idMatricula);
 
-                if (matricula != null)
+                if (matriculaStored != null) {
+                    matriculaObj.setIdMatricula(matriculaStored.getIdMatricula());
 
-                {
+                    response.setRequest(matriculaObj);
+                    matriculaObj.setUpdatedBy(matriculaObj.getCreatedBy());
+                    matriculaObj.setCreationDate(currentDate);
+                    matriculaObj.setUpdatedDate(currentDate);
+                    matriculaObj.setDeleted(false);
 
-                    matricula.setIdMatricula(matriculaObj.getIdMatricula());
-                    matricula.setUsuario(matriculaObj.getUsuario());
-                    matricula.setAlumno(matriculaObj.getAlumno());
-                    matricula.setFecha(matriculaObj.getFecha());
-                    matricula.setMonto(matriculaObj.getMonto());
-                    matricula.setTotal(matriculaObj.getTotal());
-                    matricula.setDeleted(false);
-                    matricula.setCreationDate(matriculaObj.getCreationDate());
-                    matricula.setUpdatedBy(matriculaObj.getUpdatedBy());
-                    matricula.setUpdatedDate(currentDate);
-                    matricula.setCreatedBy(matriculaObj.getCreatedBy());
-
-
-                    matriculaRepository.save(matricula);
-
+                    matriculaRepository.save(matriculaObj);
                     response.setResponse(matriculaObj);
+
                 } else {
                     throw new Exception(Constante.itemNotFound);
                 }
@@ -139,7 +132,7 @@ public class MatriculaController {
             if (matriculaStored != null) {
                 matriculaStored.setDeleted(true);
                 matriculaStored.setUpdatedDate(new Date());
-                matriculaRepository.save(matriculaStored);
+                matriculaRepository.delete(matriculaStored);
                 response.setResponse(Constante.itemDeleted);
             } else {
                 throw new Exception(Constante.itemNotFound);

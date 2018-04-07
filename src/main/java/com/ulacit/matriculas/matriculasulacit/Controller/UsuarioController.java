@@ -8,7 +8,6 @@ import com.ulacit.matriculas.matriculasulacit.Repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
@@ -20,7 +19,6 @@ public class UsuarioController {
     UsuarioRepository usuarioRepository;
 
     private Response response;
-    private Date currentDate;
 
 
     /*@ApiOperation(value = "Retorna el listado de todas las usuario")*/
@@ -29,7 +27,7 @@ public class UsuarioController {
         response = new Response();
 
         try {
-            List<Usuario> listaUsuario = usuarioRepository.findByDeleted(false);
+            List<Usuario> listaUsuario = usuarioRepository.findAll();
             response.setResponse(listaUsuario);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -45,7 +43,7 @@ public class UsuarioController {
         response = new Response();
 
         try {
-            Usuario usuario = usuarioRepository.findByIdUsuarioInAndDeletedIn(idUsuario, false);
+            Usuario usuario = usuarioRepository.findOne(idUsuario);
             response.setResponse(usuario);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -65,11 +63,6 @@ public class UsuarioController {
             if (usuarioObj != null) {
                 response.setRequest(usuarioObj);
 
-                usuarioObj.setUpdatedBy(usuarioObj.getCreatedBy());
-                usuarioObj.setCreationDate(currentDate);
-                usuarioObj.setUpdatedDate(currentDate);
-                usuarioObj.setDeleted(false);
-
                 usuarioRepository.save(usuarioObj);
                 response.setResponse(usuarioObj);
             }
@@ -86,31 +79,21 @@ public class UsuarioController {
     @RequestMapping(method = RequestMethod.PUT, value = "/{idUsuario}")
     public Response Update(@PathVariable("idUsuario") Integer idUsuario, @RequestBody Usuario usuarioObj) {
         response = new Response();
-        Usuario usuario;
-        currentDate = new Date();
+        Usuario usuarioStored;
 
         try {
             if (usuarioObj != null) {
                 usuarioObj.setIdUsuario(idUsuario);
+
                 response.setRequest(usuarioObj);
 
-                usuario = usuarioRepository.findByIdUsuarioInAndDeletedIn(idUsuario, false);
+                usuarioStored = usuarioRepository.findOne(idUsuario);
 
-                if (usuario != null)
+                if (usuarioStored != null) {
+                    usuarioObj.setIdUsuario(usuarioStored.getIdUsuario());
+                    response.setRequest(usuarioObj);
 
-                {
-
-                    usuario.setIdUsuario(usuarioObj.getIdUsuario());
-                    usuario.setNombre(usuarioObj.getNombre());
-                    usuario.setClave(usuarioObj.getClave());
-                    usuario.setDeleted(false);
-                    usuario.setCreationDate(usuarioObj.getCreationDate());
-                    usuario.setUpdatedBy(usuarioObj.getUpdatedBy());
-                    usuario.setUpdatedDate(currentDate);
-                    usuario.setCreatedBy(usuarioObj.getCreatedBy());
-
-
-                    usuarioRepository.save(usuario);
+                    usuarioRepository.save(usuarioObj);
                     response.setResponse(usuarioObj);
 
                 } else {
@@ -133,12 +116,10 @@ public class UsuarioController {
         Usuario usuarioStored;
         try {
             response.setRequest(idUsuario);
-            usuarioStored = usuarioRepository.findByIdUsuarioInAndDeletedIn(idUsuario, false);
+            usuarioStored = usuarioRepository.findOne(idUsuario);
 
             if (usuarioStored != null) {
-                usuarioStored.setDeleted(true);
-                usuarioStored.setUpdatedDate(new Date());
-                usuarioRepository.save(usuarioStored);
+                usuarioRepository.delete(usuarioStored);
                 response.setResponse(Constante.itemDeleted);
             } else {
                 throw new Exception(Constante.itemNotFound);

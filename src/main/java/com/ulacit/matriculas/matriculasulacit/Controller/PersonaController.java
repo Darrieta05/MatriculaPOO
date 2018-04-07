@@ -85,35 +85,29 @@ public class PersonaController {
     @RequestMapping(method = RequestMethod.PUT, value = "/{idPersona}")
     public Response Update(@PathVariable("idPersona") Integer idPersona, @RequestBody Persona personaObj) {
         response = new Response();
-        Persona persona;
+        Persona personaStored;
         currentDate = new Date();
 
         try {
             if (personaObj != null) {
                 personaObj.setIdPersona(idPersona);
+
                 response.setRequest(personaObj);
 
-                persona = personaRepository.findByIdPersonaInAndDeletedIn(idPersona, false);
+                personaStored = personaRepository.findOne(idPersona);
 
-                if (persona != null)
+                if (personaStored != null) {
+                    personaObj.setIdPersona(personaStored.getIdPersona());
 
-                {
+                    response.setRequest(personaObj);
+                    personaObj.setUpdatedBy(personaObj.getCreatedBy());
+                    personaObj.setCreationDate(currentDate);
+                    personaObj.setUpdatedDate(currentDate);
+                    personaObj.setDeleted(false);
 
-                    persona.setIdPersona(personaObj.getIdPersona());
-                    persona.setCedula(personaObj.getCedula());
-                    persona.setApellido(personaObj.getApellido());
-                    persona.setEdad(personaObj.getEdad());
-                    persona.setSexo(personaObj.getSexo());
-                    persona.setDeleted(false);
-                    persona.setCreationDate(personaObj.getCreationDate());
-                    persona.setUpdatedBy(personaObj.getUpdatedBy());
-                    persona.setUpdatedDate(currentDate);
-                    persona.setCreatedBy(personaObj.getCreatedBy());
-
-
-                    personaRepository.save(persona);
-
+                    personaRepository.save(personaObj);
                     response.setResponse(personaObj);
+
                 } else {
                     throw new Exception(Constante.itemNotFound);
                 }
@@ -138,7 +132,7 @@ public class PersonaController {
             if (personaStored != null) {
                 personaStored.setDeleted(true);
                 personaStored.setUpdatedDate(new Date());
-                personaRepository.save(personaStored);
+                personaRepository.delete(personaStored);
                 response.setResponse(Constante.itemDeleted);
             } else {
                 throw new Exception(Constante.itemNotFound);

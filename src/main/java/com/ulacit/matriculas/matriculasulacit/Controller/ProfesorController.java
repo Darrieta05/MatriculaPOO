@@ -8,7 +8,6 @@ import com.ulacit.matriculas.matriculasulacit.Repository.ProfesorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
@@ -20,7 +19,6 @@ public class ProfesorController {
     ProfesorRepository profesorRepository;
 
     private Response response;
-    private Date currentDate;
 
 
     /*@ApiOperation(value = "Retorna el listado de todas las profe")*/
@@ -29,7 +27,7 @@ public class ProfesorController {
         response = new Response();
 
         try {
-            List<Profesor> listaProfesor = profesorRepository.findByDeleted(false);
+            List<Profesor> listaProfesor = profesorRepository.findAll();
             response.setResponse(listaProfesor);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -45,7 +43,7 @@ public class ProfesorController {
         response = new Response();
 
         try {
-            Profesor profesor = profesorRepository.findByIdProfesorInAndDeletedIn(idProfesor, false);
+            Profesor profesor = profesorRepository.findOne(idProfesor.getIdProfesor());
             response.setResponse(profesor);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -65,11 +63,6 @@ public class ProfesorController {
             if (profesorObj != null) {
                 response.setRequest(profesorObj);
 
-                profesorObj.setUpdatedBy(profesorObj.getCreatedBy());
-                profesorObj.setCreationDate(currentDate);
-                profesorObj.setUpdatedDate(currentDate);
-                profesorObj.setDeleted(false);
-
                 profesorRepository.save(profesorObj);
                 response.setResponse(profesorObj);
             }
@@ -86,32 +79,23 @@ public class ProfesorController {
     @RequestMapping(method = RequestMethod.PUT, value = "/{idProfesor}")
     public Response Update(@PathVariable("idProfesor") Profesor_Id idProfesor, @RequestBody Profesor profesorObj) {
         response = new Response();
-        Profesor profesor;
-        currentDate = new Date();
+        Profesor profesorStored;
 
         try {
             if (profesorObj != null) {
                 profesorObj.setIdProfesor(idProfesor);
+
                 response.setRequest(profesorObj);
 
-                profesor = profesorRepository.findByIdProfesorInAndDeletedIn(idProfesor, false);
+                profesorStored = profesorRepository.findOne(idProfesor.getIdProfesor());
 
-                if (profesor != null)
+                if (profesorStored != null) {
+                    profesorObj.setIdProfesor(profesorStored.getIdProfesor());
+                    response.setRequest(profesorObj);
 
-                {
-                    profesor.setIdProfesor(profesorObj.getIdProfesor());
-                    //profesor.setPersona(profesorObj.getPersona());
-                    profesor.setEspecialidad(profesorObj.getEspecialidad());
-                    profesor.setDeleted(false);
-                    profesor.setCreationDate(profesorObj.getCreationDate());
-                    profesor.setUpdatedBy(profesorObj.getUpdatedBy());
-                    profesor.setUpdatedDate(currentDate);
-                    profesor.setCreatedBy(profesorObj.getCreatedBy());
-
-
-                    profesorRepository.save(profesor);
-
+                    profesorRepository.save(profesorObj);
                     response.setResponse(profesorObj);
+
                 } else {
                     throw new Exception(Constante.itemNotFound);
                 }
@@ -132,12 +116,10 @@ public class ProfesorController {
         Profesor profesorStored;
         try {
             response.setRequest(idProfesor);
-            profesorStored = profesorRepository.findByIdProfesorInAndDeletedIn(idProfesor, false);
+            profesorStored = profesorRepository.findOne(idProfesor.getIdProfesor());
 
             if (profesorStored != null) {
-                profesorStored.setDeleted(true);
-                profesorStored.setUpdatedDate(new Date());
-                profesorRepository.save(profesorStored);
+                profesorRepository.delete(profesorStored);
                 response.setResponse(Constante.itemDeleted);
             } else {
                 throw new Exception(Constante.itemNotFound);

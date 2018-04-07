@@ -7,7 +7,6 @@ import com.ulacit.matriculas.matriculasulacit.Repository.CarreraRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
@@ -19,7 +18,7 @@ public class CarreraController {
     CarreraRepository carreraRepository;
 
     private Response response;
-    private Date currentDate;
+
 
 
     /* @ApiOperation(value = "Retorna el listado de todas las carreras")*/
@@ -28,7 +27,7 @@ public class CarreraController {
         response = new Response();
 
         try {
-            List<Carrera> listaCarrera = carreraRepository.findByDeleted(false);
+            List<Carrera> listaCarrera = carreraRepository.findAll();
             response.setResponse(listaCarrera);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -44,7 +43,7 @@ public class CarreraController {
         response = new Response();
 
         try {
-            Carrera carrera = carreraRepository.findByIdCarreraInAndDeletedIn(idCarrera, false);
+            Carrera carrera = carreraRepository.findOne(idCarrera);
             response.setResponse(carrera);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -63,11 +62,6 @@ public class CarreraController {
             if (carreraObj != null) {
                 response.setRequest(carreraObj);
 
-                carreraObj.setUpdatedBy(carreraObj.getCreatedBy());
-                carreraObj.setCreationDate(currentDate);
-                carreraObj.setUpdatedDate(currentDate);
-                carreraObj.setDeleted(false);
-
                 carreraRepository.save(carreraObj);
                 response.setResponse(carreraObj);
             }
@@ -83,34 +77,23 @@ public class CarreraController {
     @RequestMapping(method = RequestMethod.PUT, value = "/{idCarrera}")
     public Response Update(@PathVariable("idCarrera") Integer idCarrera, @RequestBody Carrera carreraObj) {
         response = new Response();
-        Carrera carrera;
-        currentDate = new Date();
+        Carrera carreraStored;
 
         try {
             if (carreraObj != null) {
                 carreraObj.setIdCarrera(idCarrera);
+
                 response.setRequest(carreraObj);
 
-                carrera = carreraRepository.findByIdCarreraInAndDeletedIn(idCarrera, false);
+                carreraStored = carreraRepository.findOne(idCarrera);
 
-                if (carrera != null)
+                if (carreraStored != null) {
+                    carreraObj.setIdCarrera(carreraStored.getIdCarrera());
+                    response.setRequest(carreraObj);
 
-                {
-
-                    carrera.setIdCarrera(carreraObj.getIdCarrera());
-                    carrera.setCodigo(carreraObj.getCodigo());
-                    carrera.setNombre(carreraObj.getNombre());
-                    carrera.setTotalCreditos(carreraObj.getTotalCreditos());
-                    carrera.setDeleted(false);
-                    carrera.setCreationDate(carreraObj.getCreationDate());
-                    carrera.setUpdatedBy(carreraObj.getUpdatedBy());
-                    carrera.setUpdatedDate(currentDate);
-                    carrera.setCreatedBy(carreraObj.getCreatedBy());
-
-
-                    carreraRepository.save(carrera);
-
+                    carreraRepository.save(carreraObj);
                     response.setResponse(carreraObj);
+
                 } else {
                     throw new Exception(Constante.itemNotFound);
                 }
@@ -130,12 +113,10 @@ public class CarreraController {
         Carrera carreraStored;
         try {
             response.setRequest(idCarrera);
-            carreraStored = carreraRepository.findByIdCarreraInAndDeletedIn(idCarrera, false);
+            carreraStored = carreraRepository.findOne(idCarrera);
 
             if (carreraStored != null) {
-                carreraStored.setDeleted(true);
-                carreraStored.setUpdatedDate(new Date());
-                carreraRepository.save(carreraStored);
+                carreraRepository.delete(carreraStored);
                 response.setResponse(Constante.itemDeleted);
             } else {
                 throw new Exception(Constante.itemNotFound);

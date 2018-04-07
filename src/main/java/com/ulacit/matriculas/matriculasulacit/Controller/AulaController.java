@@ -7,20 +7,17 @@ import com.ulacit.matriculas.matriculasulacit.Repository.AulaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/api/aula")
 public class AulaController {
-    
+
     @Autowired
     AulaRepository aulaRepository;
 
     private Response response;
-    private Date currentDate;
-
 
     /* @ApiOperation(value = "Retorna el listado de todas las aulas")*/
     @RequestMapping(method = RequestMethod.GET)
@@ -28,7 +25,7 @@ public class AulaController {
         response = new Response();
 
         try {
-            List<Aula> listaAula = aulaRepository.findByDeleted(false);
+            List<Aula> listaAula = aulaRepository.findAll();
             response.setResponse(listaAula);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -44,7 +41,7 @@ public class AulaController {
         response = new Response();
 
         try {
-            Aula aula = aulaRepository.findByIdAulaInAndDeletedIn(idAula, false);
+            Aula aula = aulaRepository.findOne(idAula);
             response.setResponse(aula);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -63,11 +60,6 @@ public class AulaController {
             if (aulaObj != null) {
                 response.setRequest(aulaObj);
 
-                aulaObj.setUpdatedBy(aulaObj.getCreatedBy());
-                aulaObj.setCreationDate(currentDate);
-                aulaObj.setUpdatedDate(currentDate);
-                aulaObj.setDeleted(false);
-
                 aulaRepository.save(aulaObj);
                 response.setResponse(aulaObj);
             }
@@ -83,33 +75,23 @@ public class AulaController {
     @RequestMapping(method = RequestMethod.PUT, value = "/{idAula}")
     public Response Update(@PathVariable("idAula") Integer idAula, @RequestBody Aula aulaObj) {
         response = new Response();
-        Aula aula;
-        currentDate = new Date();
+        Aula aulaStored;
 
         try {
             if (aulaObj != null) {
                 aulaObj.setIdAula(idAula);
+
                 response.setRequest(aulaObj);
 
-                aula = aulaRepository.findByIdAulaInAndDeletedIn(idAula, false);
+                aulaStored = aulaRepository.findOne(idAula);
 
-                if (aula != null)
+                if (aulaStored != null) {
+                    aulaObj.setIdAula(aulaStored.getIdAula());
+                    response.setRequest(aulaObj);
 
-                {
-                    aula.setIdAula(aulaObj.getIdAula());
-                    aula.setTipo(aulaObj.getTipo());
-                    aula.setArea(aulaObj.getArea());
-                    aula.setNumeroAula(aulaObj.getNumeroAula());
-                    aula.setDeleted(false);
-                    aula.setCreationDate(aulaObj.getCreationDate());
-                    aula.setUpdatedBy(aulaObj.getUpdatedBy());
-                    aula.setUpdatedDate(currentDate);
-                    aula.setCreatedBy(aulaObj.getCreatedBy());
-
-
-                    aulaRepository.save(aula);
-
+                    aulaRepository.save(aulaObj);
                     response.setResponse(aulaObj);
+
                 } else {
                     throw new Exception(Constante.itemNotFound);
                 }
@@ -129,12 +111,10 @@ public class AulaController {
         Aula aulaStored;
         try {
             response.setRequest(idAula);
-            aulaStored = aulaRepository.findByIdAulaInAndDeletedIn(idAula, false);
+            aulaStored = aulaRepository.findOne(idAula);
 
             if (aulaStored != null) {
-                aulaStored.setDeleted(true);
-                aulaStored.setUpdatedDate(new Date());
-                aulaRepository.save(aulaStored);
+                aulaRepository.delete(aulaStored);
                 response.setResponse(Constante.itemDeleted);
             } else {
                 throw new Exception(Constante.itemNotFound);

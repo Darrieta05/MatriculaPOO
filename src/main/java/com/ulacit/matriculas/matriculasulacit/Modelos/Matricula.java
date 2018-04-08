@@ -15,13 +15,12 @@ public class Matricula {
 
     /*Audit fields*/
     //@JsonFormat(pattern="yyyy-MM-dd@HH:mm:ss.SSSZ")
-    private Date creationDate;
+    private Date fechaCreacion;
     //@JsonFormat(pattern="yyyy-MM-dd@HH:mm:ss.SSSZ")
-    private Date updatedDate;
-    private int createdBy;
-    private int updatedBy;
-    /*@ApiModelProperty(notes = "Indica si el registro se eliminó")*/
-    private Boolean deleted = false;
+    private Date fechaActualizacion;
+    private int creadoPor;
+    private  int actualizadoPor;
+    private Boolean eliminado = false;
 
 
 
@@ -92,43 +91,43 @@ public class Matricula {
         this.alumno = alumno;
     }
 
-    public Date getCreationDate() {
-        return creationDate;
+    public Date getFechaCreacion() {
+        return fechaCreacion;
     }
 
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
     }
 
-    public Date getUpdatedDate() {
-        return updatedDate;
+    public Date getFechaActualizacion() {
+        return fechaActualizacion;
     }
 
-    public void setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
+    public void setFechaActualizacion(Date fechaActualizacion) {
+        this.fechaActualizacion = fechaActualizacion;
     }
 
-    public int getCreatedBy() {
-        return createdBy;
+    public int getCreadoPor() {
+        return creadoPor;
     }
 
-    public void setCreatedBy(int createdBy) {
-        this.createdBy = createdBy;
+    public void setCreadoPor(int creadoPor) {
+        this.creadoPor = creadoPor;
     }
 
-    public int getUpdatedBy() {
-        return updatedBy;
+    public Boolean getEliminado() {
+        return eliminado;
     }
 
-    public void setUpdatedBy(int updatedBy) {
-        this.updatedBy = updatedBy;
+    public void setEliminado(Boolean eliminado) {
+        this.eliminado = eliminado;
     }
 
-    public Boolean getDeleted() {
-        return deleted;
+    public int getActualizadoPor() {
+        return actualizadoPor;
     }
 
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
+    public void setActualizadoPor(int actualizadoPor) {
+        this.actualizadoPor = actualizadoPor;
     }
 }

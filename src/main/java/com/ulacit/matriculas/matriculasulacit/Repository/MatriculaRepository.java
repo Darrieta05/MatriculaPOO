@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface MatriculaRepository extends JpaRepository<Matricula, Integer> {
-    List<Matricula> findByDeleted(Boolean deleted);
-    Matricula findByIdMatriculaInAndDeletedIn(int idMatricula, Boolean deleted);
+    List<Matricula> findByEliminado(Boolean eliminado);
+    Matricula findByIdMatriculaInAndEliminadoIn(int idMatricula, Boolean eliminado);
 }

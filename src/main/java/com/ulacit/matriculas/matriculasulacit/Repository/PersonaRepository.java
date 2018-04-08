@@ -5,6 +5,6 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PersonaRepository extends JpaRepository<Persona, Integer> {
-    List<Persona> findByDeleted(Boolean deleted);
-    Persona findByIdPersonaInAndDeletedIn(int idPersona, Boolean deleted);
+    List<Persona> findByEliminado(Boolean eliminado);
+    Persona findByIdPersonaInAndEliminadoIn(int idPersona, Boolean eliminado);
 }

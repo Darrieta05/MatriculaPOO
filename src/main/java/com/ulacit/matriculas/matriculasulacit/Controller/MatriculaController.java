@@ -19,7 +19,7 @@ public class MatriculaController {
     MatriculaRepository matriculaRepository;
 
     private Response response;
-    private Date currentDate;
+    private Date fechaActual;
 
 
     /*@ApiOperation(value = "Retorna el listado de todas las matriculas")*/
@@ -28,7 +28,7 @@ public class MatriculaController {
         response = new Response();
 
         try {
-            List<Matricula> listaMatricula = matriculaRepository.findByDeleted(false);
+            List<Matricula> listaMatricula = matriculaRepository.findByEliminado(false);
             response.setResponse(listaMatricula);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -44,7 +44,7 @@ public class MatriculaController {
         response = new Response();
 
         try {
-            Matricula matricula = matriculaRepository.findByIdMatriculaInAndDeletedIn(idMatricula, false);
+            Matricula matricula = matriculaRepository.findByIdMatriculaInAndEliminadoIn(idMatricula, false);
             response.setResponse(matricula);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -64,10 +64,10 @@ public class MatriculaController {
             if (matriculaObj != null) {
                 response.setRequest(matriculaObj);
 
-                matriculaObj.setUpdatedBy(matriculaObj.getCreatedBy());
-                matriculaObj.setCreationDate(currentDate);
-                matriculaObj.setUpdatedDate(currentDate);
-                matriculaObj.setDeleted(false);
+                matriculaObj.setCreadoPor(matriculaObj.getCreadoPor());
+                matriculaObj.setFechaCreacion(fechaActual);
+                matriculaObj.setFechaActualizacion(fechaActual);
+                matriculaObj.setEliminado(false);
 
                 matriculaRepository.save(matriculaObj);
                 response.setResponse(matriculaObj);
@@ -86,7 +86,7 @@ public class MatriculaController {
     public Response Update(@PathVariable("idMatricula") Integer idMatricula, @RequestBody Matricula matriculaObj) {
         response = new Response();
         Matricula matriculaStored;
-        currentDate = new Date();
+        fechaActual = new Date();
 
         try {
             if (matriculaObj != null) {
@@ -100,10 +100,11 @@ public class MatriculaController {
                     matriculaObj.setIdMatricula(matriculaStored.getIdMatricula());
 
                     response.setRequest(matriculaObj);
-                    matriculaObj.setUpdatedBy(matriculaObj.getCreatedBy());
-                    matriculaObj.setCreationDate(currentDate);
-                    matriculaObj.setUpdatedDate(currentDate);
-                    matriculaObj.setDeleted(false);
+
+                    matriculaObj.setCreadoPor(matriculaObj.getCreadoPor());
+                    matriculaObj.setFechaCreacion(fechaActual);
+                    matriculaObj.setFechaActualizacion(fechaActual);
+                    matriculaObj.setEliminado(false);
 
                     matriculaRepository.save(matriculaObj);
                     response.setResponse(matriculaObj);
@@ -127,11 +128,11 @@ public class MatriculaController {
         Matricula matriculaStored;
         try {
             response.setRequest(idMatricula);
-            matriculaStored = matriculaRepository.findByIdMatriculaInAndDeletedIn(idMatricula, false);
+            matriculaStored = matriculaRepository.findByIdMatriculaInAndEliminadoIn(idMatricula, false);
 
             if (matriculaStored != null) {
-                matriculaStored.setDeleted(true);
-                matriculaStored.setUpdatedDate(new Date());
+                matriculaStored.setEliminado(true);
+                matriculaStored.setFechaActualizacion(new Date());
                 matriculaRepository.delete(matriculaStored);
                 response.setResponse(Constante.itemDeleted);
             } else {

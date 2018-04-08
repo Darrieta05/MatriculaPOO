@@ -19,7 +19,7 @@ public class PersonaController {
     PersonaRepository personaRepository;
 
     private Response response;
-    private Date currentDate;
+    private Date fechaActual;
 
 
     /*@ApiOperation(value = "Retorna el listado de todas las personas")*/
@@ -28,7 +28,7 @@ public class PersonaController {
         response = new Response();
 
         try {
-            List<Persona> listaPersona = personaRepository.findByDeleted(false);
+            List<Persona> listaPersona = personaRepository.findByEliminado(false);
             response.setResponse(listaPersona);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -44,7 +44,7 @@ public class PersonaController {
         response = new Response();
 
         try {
-            Persona persona = personaRepository.findByIdPersonaInAndDeletedIn(idPersona, false);
+            Persona persona = personaRepository.findByIdPersonaInAndEliminadoIn(idPersona, false);
             response.setResponse(persona);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -64,10 +64,10 @@ public class PersonaController {
             if (personaObj != null) {
                 response.setRequest(personaObj);
 
-                personaObj.setUpdatedBy(personaObj.getCreatedBy());
-                personaObj.setCreationDate(currentDate);
-                personaObj.setUpdatedDate(currentDate);
-                personaObj.setDeleted(false);
+                personaObj.setCreadoPor(personaObj.getCreadoPor());
+                personaObj.setFechaCreacion(fechaActual);
+                personaObj.setFechaActualizacion(fechaActual);
+                personaObj.setEliminado(false);
 
                 personaRepository.save(personaObj);
                 response.setResponse(personaObj);
@@ -86,7 +86,7 @@ public class PersonaController {
     public Response Update(@PathVariable("idPersona") Integer idPersona, @RequestBody Persona personaObj) {
         response = new Response();
         Persona personaStored;
-        currentDate = new Date();
+        fechaActual = new Date();
 
         try {
             if (personaObj != null) {
@@ -100,10 +100,11 @@ public class PersonaController {
                     personaObj.setIdPersona(personaStored.getIdPersona());
 
                     response.setRequest(personaObj);
-                    personaObj.setUpdatedBy(personaObj.getCreatedBy());
-                    personaObj.setCreationDate(currentDate);
-                    personaObj.setUpdatedDate(currentDate);
-                    personaObj.setDeleted(false);
+
+                    personaObj.setCreadoPor(personaObj.getCreadoPor());
+                    personaObj.setFechaCreacion(fechaActual);
+                    personaObj.setFechaActualizacion(fechaActual);
+                    personaObj.setEliminado(false);
 
                     personaRepository.save(personaObj);
                     response.setResponse(personaObj);
@@ -127,11 +128,11 @@ public class PersonaController {
         Persona personaStored;
         try {
             response.setRequest(idPersona);
-            personaStored = personaRepository.findByIdPersonaInAndDeletedIn(idPersona, false);
+            personaStored = personaRepository.findByIdPersonaInAndEliminadoIn(idPersona, false);
 
             if (personaStored != null) {
-                personaStored.setDeleted(true);
-                personaStored.setUpdatedDate(new Date());
+                personaStored.setEliminado(true);
+                personaStored.setFechaActualizacion(new Date());
                 personaRepository.delete(personaStored);
                 response.setResponse(Constante.itemDeleted);
             } else {

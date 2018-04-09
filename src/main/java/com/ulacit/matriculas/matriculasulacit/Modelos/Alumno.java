@@ -2,7 +2,6 @@ package com.ulacit.matriculas.matriculasulacit.Modelos;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 public class Alumno implements Serializable{
@@ -26,7 +25,7 @@ public class Alumno implements Serializable{
     public void setIdAlumno(Alumno_Id idAlumno) {
         this.idAlumno = idAlumno;
     }
-    
+
     public Carrera getCarrera() {
         return carrera;
     }
@@ -42,5 +41,4 @@ public class Alumno implements Serializable{
     public void setBeca(String beca) {
         Beca = beca;
     }
-
 }

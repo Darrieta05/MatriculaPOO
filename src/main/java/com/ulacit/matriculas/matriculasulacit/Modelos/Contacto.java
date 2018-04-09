@@ -1,13 +1,12 @@
 package com.ulacit.matriculas.matriculasulacit.Modelos;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 public class Contacto {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idContacto;
     private String nombre;
     private String descripcion;

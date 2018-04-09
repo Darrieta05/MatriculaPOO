@@ -7,7 +7,7 @@ import java.util.Date;
 public class Matricula {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idMatricula;
     private Date fecha;
     private Double monto;

@@ -1,13 +1,12 @@
 package com.ulacit.matriculas.matriculasulacit.Modelos;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 public class DetalleMatricula {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idDetalleMatricula;
 
     @ManyToOne(cascade=CascadeType.ALL)

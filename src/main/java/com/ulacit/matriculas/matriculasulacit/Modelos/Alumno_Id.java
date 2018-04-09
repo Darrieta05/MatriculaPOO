@@ -1,12 +1,13 @@
 package com.ulacit.matriculas.matriculasulacit.Modelos;
 
 import java.io.Serializable;
-import java.util.*;
 import javax.persistence.*;
 
 @Embeddable
 public class Alumno_Id implements Serializable{
-    
+
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idAlumno")
     private Integer idAlumno;
     @JoinColumn(name = "idPersona")
@@ -21,12 +22,19 @@ public class Alumno_Id implements Serializable{
         this.persona = id_persona;
     }
 
+    public Integer getIdAlumno() {
+        return idAlumno;
+    }
+
+    public void setIdAlumno(Integer idAlumno) {
+        this.idAlumno = idAlumno;
+    }
+
     public Persona getPersona() {
         return persona;
     }
 
-    public Integer getIdAlumno() {
-        return idAlumno;
+    public void setPersona(Persona persona) {
+        this.persona = persona;
     }
- 
 }

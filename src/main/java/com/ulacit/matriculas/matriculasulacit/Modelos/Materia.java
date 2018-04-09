@@ -1,14 +1,12 @@
 package com.ulacit.matriculas.matriculasulacit.Modelos;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 public class Materia {
 
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idMateria;
     private String nombre;
     private String codigo;
@@ -33,6 +31,22 @@ public class Materia {
 
     public void setIdMateria(Integer idMateria) {
         this.idMateria = idMateria;
+    }
+
+    public Carrera getCarrera() {
+        return carrera;
+    }
+
+    public void setCarrera(Carrera carrera) {
+        this.carrera = carrera;
+    }
+
+    public Aula getAula() {
+        return aula;
+    }
+
+    public void setAula(Aula aula) {
+        this.aula = aula;
     }
 
     public String getNombre() {

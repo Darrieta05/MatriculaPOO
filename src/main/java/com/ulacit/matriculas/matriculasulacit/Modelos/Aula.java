@@ -10,7 +10,7 @@ import javax.persistence.Id;
 public class Aula {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idAula;
     private String tipo;
     private String area;

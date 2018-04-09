@@ -7,7 +7,7 @@ import java.util.Date;
 public class DetalleMatricula {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idDetalleMatricula;
 
     @ManyToOne(cascade=CascadeType.ALL)

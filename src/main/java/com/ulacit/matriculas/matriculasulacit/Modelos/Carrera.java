@@ -12,7 +12,7 @@ import java.util.Date;
 public class Carrera {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idCarrera;
     private String codigo;
     private String nombre;
@@ -55,5 +55,4 @@ public class Carrera {
     public void setTotalCreditos(Integer totalCreditos) {
         this.totalCreditos = totalCreditos;
     }
-
 }

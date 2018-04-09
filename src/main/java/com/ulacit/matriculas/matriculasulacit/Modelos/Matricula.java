@@ -7,11 +7,26 @@ import java.util.Date;
 public class Matricula {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idMatricula;
     private Date fecha;
     private Double monto;
     private Double total;
+    
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumns({
+        @JoinColumn(
+            name = "id_alumno",
+            referencedColumnName = "idAlumno"),
+        @JoinColumn(
+            name = "id_persona",
+            referencedColumnName = "idPersona")
+    })
+    private Alumno alumno;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_usuario")
+    private Usuario usuario;
 
     /*Audit fields*/
     //@JsonFormat(pattern="yyyy-MM-dd@HH:mm:ss.SSSZ")
@@ -21,23 +36,6 @@ public class Matricula {
     private int creadoPor;
     private  int actualizadoPor;
     private Boolean eliminado = false;
-
-
-
-    @ManyToOne
-    @JoinColumns({
-        @JoinColumn(
-            name = "idAlumno",
-            referencedColumnName = "idAlumno"),
-        @JoinColumn(
-            name = "idPersona",
-            referencedColumnName = "idPersona")
-    })
-    private Alumno alumno;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "idUsuario")
-    private Usuario usuario;
 
     public Matricula() {
         super();

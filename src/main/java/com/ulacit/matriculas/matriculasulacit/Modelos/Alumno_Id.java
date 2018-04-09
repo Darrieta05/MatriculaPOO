@@ -7,6 +7,7 @@ import javax.persistence.*;
 @Embeddable
 public class Alumno_Id implements Serializable{
     
+    
     @Column(name = "idAlumno")
     private Integer idAlumno;
     @JoinColumn(name = "idPersona")

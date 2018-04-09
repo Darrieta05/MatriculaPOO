@@ -10,8 +10,7 @@ public class Profesor_Id implements Serializable{
     @Column(name = "idProfesor")
     private Integer idProfesor;
     @JoinColumn(name = "idPersona")
-    @ManyToOne(cascade=CascadeType.ALL)  
-    //@PrimaryKeyJoinColumn(referencedColumnName = "idPersona")
+    @ManyToOne(cascade=CascadeType.ALL)
     private Persona persona;
  
     public Profesor_Id() {
@@ -28,19 +27,5 @@ public class Profesor_Id implements Serializable{
 
     public Integer getIdProfesor() {
         return idProfesor;
-    }
- 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Profesor_Id)) return false;
-        Profesor_Id that = (Profesor_Id) o;
-        return Objects.equals(getIdProfesor(), that.getIdProfesor()) &&
-                Objects.equals(getPersona(), that.getPersona());
-    }
- 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getIdProfesor(), getPersona());
     }
 }

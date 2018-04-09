@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Embeddable
 public class Alumno_Id implements Serializable{
 
-
+    
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idAlumno")
     private Integer idAlumno;

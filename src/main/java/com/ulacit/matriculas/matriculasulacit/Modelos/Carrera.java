@@ -52,5 +52,4 @@ public class Carrera {
     public void setTotalCreditos(Integer totalCreditos) {
         this.totalCreditos = totalCreditos;
     }
-
 }

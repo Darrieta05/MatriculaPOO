@@ -33,22 +33,6 @@ public class Materia {
         this.idMateria = idMateria;
     }
 
-    public Carrera getCarrera() {
-        return carrera;
-    }
-
-    public void setCarrera(Carrera carrera) {
-        this.carrera = carrera;
-    }
-
-    public Aula getAula() {
-        return aula;
-    }
-
-    public void setAula(Aula aula) {
-        this.aula = aula;
-    }
-
     public String getNombre() {
         return nombre;
     }
@@ -81,19 +65,19 @@ public class Materia {
         this.creditos = creditos;
     }
 
-    public Aula getAula() {
-        return aula;
-    }
-
-    public void setAula(Aula aula) {
-        this.aula = aula;
-    }
-
     public Carrera getCarrera() {
         return carrera;
     }
 
     public void setCarrera(Carrera carrera) {
         this.carrera = carrera;
+    }
+
+    public Aula getAula() {
+        return aula;
+    }
+
+    public void setAula(Aula aula) {
+        this.aula = aula;
     }
 }

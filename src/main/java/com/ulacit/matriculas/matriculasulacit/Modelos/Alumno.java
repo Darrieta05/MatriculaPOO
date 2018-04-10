@@ -7,7 +7,6 @@ import javax.persistence.*;
 public class Alumno implements Serializable{
     
     @EmbeddedId
-    @MapsId("alumnoKey")
     private Alumno_Id alumnoKey;
     @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name="idCarrera")

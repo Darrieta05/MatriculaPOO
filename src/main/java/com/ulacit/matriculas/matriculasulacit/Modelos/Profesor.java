@@ -7,7 +7,6 @@ import javax.persistence.*;
 public class Profesor{
 
     @EmbeddedId
-    @MapsId("profesorKey")
     private Profesor_Id profesorKey;
     
     private String especialidad;

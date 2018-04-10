@@ -8,7 +8,7 @@ public class Matricula {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idMatricula;
+    private int idMatricula;
     private Date fecha;
     private Double monto;
     private Double total;
@@ -41,11 +41,11 @@ public class Matricula {
         super();
     }
 
-    public Integer getIdMatricula() {
+    public int getIdMatricula() {
         return idMatricula;
     }
 
-    public void setIdMatricula(Integer idMatricula) {
+    public void setIdMatricula(int idMatricula) {
         this.idMatricula = idMatricula;
     }
 
@@ -73,20 +73,20 @@ public class Matricula {
         this.total = total;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
     public Alumno getAlumno() {
         return alumno;
     }
 
     public void setAlumno(Alumno alumno) {
         this.alumno = alumno;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public Date getFechaCreacion() {
@@ -113,19 +113,19 @@ public class Matricula {
         this.creadoPor = creadoPor;
     }
 
-    public Boolean getEliminado() {
-        return eliminado;
-    }
-
-    public void setEliminado(Boolean eliminado) {
-        this.eliminado = eliminado;
-    }
-
     public int getActualizadoPor() {
         return actualizadoPor;
     }
 
     public void setActualizadoPor(int actualizadoPor) {
         this.actualizadoPor = actualizadoPor;
+    }
+
+    public Boolean getEliminado() {
+        return eliminado;
+    }
+
+    public void setEliminado(Boolean eliminado) {
+        this.eliminado = eliminado;
     }
 }

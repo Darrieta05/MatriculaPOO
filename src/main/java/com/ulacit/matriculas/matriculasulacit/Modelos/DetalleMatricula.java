@@ -7,7 +7,7 @@ public class DetalleMatricula {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idDetalleMatricula;
+    private int idDetalleMatricula;
 
     @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name="idMatricula")
@@ -23,11 +23,11 @@ public class DetalleMatricula {
         super();
     }
 
-    public Integer getIdDetalleMatricula() {
+    public int getIdDetalleMatricula() {
         return idDetalleMatricula;
     }
 
-    public void setIdDetalleMatricula(Integer idDetalleMatricula) {
+    public void setIdDetalleMatricula(int idDetalleMatricula) {
         this.idDetalleMatricula = idDetalleMatricula;
     }
 

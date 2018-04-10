@@ -10,7 +10,7 @@ public class Carrera {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idCarrera;
+    private int idCarrera;
     private String codigo;
     private String nombre;
     private Integer totalCreditos;
@@ -21,11 +21,11 @@ public class Carrera {
         super();
     }
 
-    public Integer getIdCarrera() {
+    public int getIdCarrera() {
         return idCarrera;
     }
 
-    public void setIdCarrera(Integer idCarrera) {
+    public void setIdCarrera(int idCarrera) {
         this.idCarrera = idCarrera;
     }
 

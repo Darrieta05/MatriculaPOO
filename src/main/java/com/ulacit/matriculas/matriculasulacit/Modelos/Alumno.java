@@ -7,8 +7,8 @@ import javax.persistence.*;
 public class Alumno implements Serializable{
     
     @EmbeddedId
-    private Alumno_Id idAlumno;
-    
+    @MapsId("alumnoKey")
+    private Alumno_Id alumnoKey;
     @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name="idCarrera")
     private Carrera carrera;
@@ -18,12 +18,12 @@ public class Alumno implements Serializable{
         super();
     }
 
-    public Alumno_Id getIdAlumno() {
-        return idAlumno;
+    public Alumno_Id getAlumnoKey() {
+        return alumnoKey;
     }
 
-    public void setIdAlumno(Alumno_Id idAlumno) {
-        this.idAlumno = idAlumno;
+    public void setAlumnoKey(Alumno_Id alumnoKey) {
+        this.alumnoKey = alumnoKey;
     }
 
     public Carrera getCarrera() {

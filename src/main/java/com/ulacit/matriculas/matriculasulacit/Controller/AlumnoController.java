@@ -84,14 +84,14 @@ public class AlumnoController {
 
         try {
             if (alumnoObj != null) {
-                alumnoObj.setIdAlumno(idAlumno);
+                alumnoObj.setAlumnoKey(idAlumno);
 
                 response.setRequest(alumnoObj);
 
                 alumnoStored = alumnoRepository.findOne(idAlumno.getIdAlumno());
 
                 if (alumnoStored != null) {
-                    alumnoObj.setIdAlumno(alumnoStored.getIdAlumno());
+                    alumnoObj.setAlumnoKey(alumnoStored.getAlumnoKey());
                     response.setRequest(alumnoObj);
 
                     alumnoRepository.save(alumnoObj);

@@ -7,7 +7,7 @@ public class Contacto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idContacto;
+    private int idContacto;
     private String nombre;
     private String descripcion;
     private String tipo;
@@ -21,11 +21,11 @@ public class Contacto {
         super();
     }
 
-    public Integer getIdContacto() {
+    public int getIdContacto() {
         return idContacto;
     }
 
-    public void setIdContacto(Integer idContacto) {
+    public void setIdContacto(int idContacto) {
         this.idContacto = idContacto;
     }
 

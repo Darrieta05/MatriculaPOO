@@ -7,7 +7,8 @@ import javax.persistence.*;
 public class Profesor{
 
     @EmbeddedId
-    private Profesor_Id idProfesor;
+    @MapsId("profesorKey")
+    private Profesor_Id profesorKey;
     
     private String especialidad;
 
@@ -15,14 +16,14 @@ public class Profesor{
         super();
     }
 
-    public Profesor_Id getIdProfesor() {
-        return idProfesor;
+    public Profesor_Id getProfesorKey() {
+        return profesorKey;
     }
 
-    public void setIdProfesor(Profesor_Id idProfesor) {
-        this.idProfesor = idProfesor;
+    public void setProfesorKey(Profesor_Id profesorKey) {
+        this.profesorKey = profesorKey;
     }
-    
+
     public String getEspecialidad() {
         return especialidad;
     }
@@ -30,5 +31,4 @@ public class Profesor{
     public void setEspecialidad(String especialidad) {
         this.especialidad = especialidad;
     }
-
 }

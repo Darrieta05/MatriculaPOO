@@ -11,7 +11,7 @@ public class Aula {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idAula;
+    private int idAula;
     private String tipo;
     private String area;
     private String numeroAula;
@@ -20,11 +20,11 @@ public class Aula {
         super();
     }
 
-    public Integer getIdAula() {
+    public int getIdAula() {
         return idAula;
     }
 
-    public void setIdAula(Integer idAula) {
+    public void setIdAula(int idAula) {
         this.idAula = idAula;
     }
 
@@ -51,5 +51,4 @@ public class Aula {
     public void setNumeroAula(String numeroAula) {
         this.numeroAula = numeroAula;
     }
-
 }

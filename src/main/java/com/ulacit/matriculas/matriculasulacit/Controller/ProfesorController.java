@@ -83,14 +83,14 @@ public class ProfesorController {
 
         try {
             if (profesorObj != null) {
-                profesorObj.setIdProfesor(idProfesor);
+                profesorObj.setProfesorKey(idProfesor);
 
                 response.setRequest(profesorObj);
 
                 profesorStored = profesorRepository.findOne(idProfesor.getIdProfesor());
 
                 if (profesorStored != null) {
-                    profesorObj.setIdProfesor(profesorStored.getIdProfesor());
+                    profesorObj.setProfesorKey(profesorStored.getProfesorKey());
                     response.setRequest(profesorObj);
 
                     profesorRepository.save(profesorObj);

@@ -7,7 +7,7 @@ public class Materia {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idMateria;
+    private int idMateria;
     private String nombre;
     private String codigo;
     private Double costo;
@@ -25,11 +25,11 @@ public class Materia {
         super();
     }
 
-    public Integer getIdMateria() {
+    public int getIdMateria() {
         return idMateria;
     }
 
-    public void setIdMateria(Integer idMateria) {
+    public void setIdMateria(int idMateria) {
         this.idMateria = idMateria;
     }
 

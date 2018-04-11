@@ -2,10 +2,11 @@ package com.ulacit.matriculas.matriculasulacit.Modelos;
 
 
 public class Constante {
-    
+
     public Constante() {}
     /*
      * Status de error del response
+     * Aqui se aplica el patron de Singleton
      * */
     public final static int ok = 200;
     public final static int badRequest = 400;

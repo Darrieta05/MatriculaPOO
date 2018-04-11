@@ -1,8 +1,8 @@
 package com.ulacit.matriculas.matriculasulacit.Controller;
 
-import com.ulacit.matriculas.matriculasulacit.Modelos.Constante;
-import com.ulacit.matriculas.matriculasulacit.Modelos.Response;
-import com.ulacit.matriculas.matriculasulacit.Modelos.Materia;
+import com.ulacit.matriculas.matriculasulacit.Modelos.*;
+import com.ulacit.matriculas.matriculasulacit.Repository.AulaRepository;
+import com.ulacit.matriculas.matriculasulacit.Repository.CarreraRepository;
 import com.ulacit.matriculas.matriculasulacit.Repository.MateriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +16,12 @@ public class MateriaController {
 
     @Autowired
     MateriaRepository materiaRepository;
+
+    @Autowired
+    AulaRepository aulaRepository;
+
+    @Autowired
+    CarreraRepository carreraRepository;
 
     private Response response;
 
@@ -60,8 +66,15 @@ public class MateriaController {
             if (materiaObj != null) {
                 response.setRequest(materiaObj);
 
-                materiaRepository.save(materiaObj);
-                response.setResponse(materiaObj);
+                Aula aulaObj = aulaRepository.findOne(materiaObj.getAula().getIdAula());
+                Carrera carreraObj = carreraRepository.findOne(materiaObj.getCarrera().getIdCarrera());
+
+                if (aulaObj != null && carreraObj != null) {
+                    materiaObj.setAula(aulaObj);
+                    materiaObj.setCarrera(carreraObj);
+                    materiaRepository.save(materiaObj);
+                    response.setResponse(materiaObj);
+                }
             }
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -103,26 +116,5 @@ public class MateriaController {
 
         return response;
     }
-
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{idMateria}")
-    public Response Delete(@PathVariable("idMateria") Integer idMateria) {
-
-        Response response = new Response();
-        Materia materiaStored;
-        try {
-            response.setRequest(idMateria);
-            materiaStored = materiaRepository.findOne(idMateria);
-
-            if (materiaStored != null) {
-                materiaRepository.delete(materiaStored);
-                response.setResponse(Constante.itemDeleted);
-            } else {
-                throw new Exception(Constante.itemNotFound);
-            }
-        } catch (Exception e) {
-            response.setMessage(e.getMessage());
-            response.setHttpStatus(Constante.badRequest);
-        }
-        return response;
-    }
+    
 }

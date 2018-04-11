@@ -3,6 +3,10 @@ package com.ulacit.matriculas.matriculasulacit.Modelos;
 import java.io.Serializable;
 import javax.persistence.*;
 
+/*Esto es un ejemplo del patron Dependency Injection
+Mediante las anotaciones que brinda spring framework se crea la inyeccion de dependencia
+de la cual se vaya a usar, en este caso se crea la anotacion de
+@Entity para referenciar que el mismo es una entidad/modelo*/
 @Entity
 public class Alumno implements Serializable{
     

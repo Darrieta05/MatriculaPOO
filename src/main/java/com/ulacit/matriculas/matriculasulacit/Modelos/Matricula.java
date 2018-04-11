@@ -16,16 +16,16 @@ public class Matricula {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumns({
         @JoinColumn(
-            name = "id_alumno",
+            name = "idAlumno",
             referencedColumnName = "idAlumno"),
         @JoinColumn(
-            name = "id_persona",
+            name = "idPersona",
             referencedColumnName = "idPersona")
     })
     private Alumno alumno;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_usuario")
+    @JoinColumn(name = "idUsuario")
     private Usuario usuario;
 
     /*Audit fields*/

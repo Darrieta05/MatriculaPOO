@@ -13,11 +13,11 @@ public class Materia {
     private Double costo;
     private Integer creditos;
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="idCarrera")
     private Carrera carrera;
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="idAula")
     private Aula aula;
 

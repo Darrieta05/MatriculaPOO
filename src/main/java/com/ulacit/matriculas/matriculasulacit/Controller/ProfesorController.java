@@ -1,9 +1,11 @@
 package com.ulacit.matriculas.matriculasulacit.Controller;
 
 import com.ulacit.matriculas.matriculasulacit.Modelos.Constante;
+import com.ulacit.matriculas.matriculasulacit.Modelos.Persona;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Response;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Profesor;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Profesor_Id;
+import com.ulacit.matriculas.matriculasulacit.Repository.PersonaRepository;
 import com.ulacit.matriculas.matriculasulacit.Repository.ProfesorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,10 @@ public class ProfesorController {
     
     @Autowired
     ProfesorRepository profesorRepository;
+    
+    
+    @Autowired
+    PersonaRepository personaRepository;
 
     private Response response;
 
@@ -39,11 +45,13 @@ public class ProfesorController {
 
     /*@ApiOperation(value = "Retorna el matricula filtrando idProfesor")*/
     @RequestMapping(method = RequestMethod.GET, value = "/{idProfesor}")
-    public Response GetById(@PathVariable("idProfesor") Profesor_Id idProfesor) {
+    public Response GetById(@PathVariable("idProfesor") Integer idProfesor) {
         response = new Response();
 
         try {
-            Profesor profesor = profesorRepository.findOne(idProfesor.getIdProfesor());
+            Persona p = personaRepository.findByIdPersonaInAndEliminadoIn(idProfesor, false);
+            Profesor_Id profesorKey = new Profesor_Id(idProfesor, p);
+            Profesor profesor = profesorRepository.findOne(profesorKey);
             response.setResponse(profesor);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -62,9 +70,13 @@ public class ProfesorController {
         try {
             if (profesorObj != null) {
                 response.setRequest(profesorObj);
-
-                profesorRepository.save(profesorObj);
-                response.setResponse(profesorObj);
+                
+                Persona p = personaRepository.findByIdPersonaInAndEliminadoIn(profesorObj.getProfesorKey().getPersona().getIdPersona(), false);
+                 if (p != null) {
+                    profesorObj.getProfesorKey().setPersona(p);
+                    profesorRepository.save(profesorObj);
+                    response.setResponse(profesorObj);
+                }
             }
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -77,17 +89,18 @@ public class ProfesorController {
 
     /*@ApiOperation(value = "Modifica la información de una profesor")*/
     @RequestMapping(method = RequestMethod.PUT, value = "/{idProfesor}")
-    public Response Update(@PathVariable("idProfesor") Profesor_Id idProfesor, @RequestBody Profesor profesorObj) {
+    public Response Update(@PathVariable("idProfesor") Integer idProfesor, @RequestBody Profesor profesorObj) {
         response = new Response();
         Profesor profesorStored;
 
         try {
             if (profesorObj != null) {
-                profesorObj.setProfesorKey(idProfesor);
 
                 response.setRequest(profesorObj);
 
-                profesorStored = profesorRepository.findOne(idProfesor.getIdProfesor());
+                Persona p = personaRepository.findByIdPersonaInAndEliminadoIn(idProfesor, false);
+                Profesor_Id profesorKey = new Profesor_Id(idProfesor, p);
+                profesorStored = profesorRepository.findOne(profesorKey);
 
                 if (profesorStored != null) {
                     profesorObj.setProfesorKey(profesorStored.getProfesorKey());
@@ -105,29 +118,6 @@ public class ProfesorController {
             response.setHttpStatus(Constante.badRequest);
         }
 
-        return response;
-    }
-
-    //@ApiOperation(value = "Elimina la información de una profesor")
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{idProfesor}")
-    public Response Delete(@PathVariable("idProfesor") Profesor_Id idProfesor) {
-
-        Response response = new Response();
-        Profesor profesorStored;
-        try {
-            response.setRequest(idProfesor);
-            profesorStored = profesorRepository.findOne(idProfesor.getIdProfesor());
-
-            if (profesorStored != null) {
-                profesorRepository.delete(profesorStored);
-                response.setResponse(Constante.itemDeleted);
-            } else {
-                throw new Exception(Constante.itemNotFound);
-            }
-        } catch (Exception e) {
-            response.setMessage(e.getMessage());
-            response.setHttpStatus(Constante.badRequest);
-        }
         return response;
     }
 }

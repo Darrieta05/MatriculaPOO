@@ -16,8 +16,8 @@ public class Profesor_Id implements Serializable{
     public Profesor_Id() {
     }
  
-    public Profesor_Id(int id_alumno, Persona id_persona) {
-        this.idProfesor = id_alumno;
+    public Profesor_Id(int idProfesor, Persona id_persona) {
+        this.idProfesor = idProfesor;
         this.persona = id_persona;
     }
 

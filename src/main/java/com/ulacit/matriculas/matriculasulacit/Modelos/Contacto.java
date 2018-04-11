@@ -12,7 +12,7 @@ public class Contacto {
     private String descripcion;
     private String tipo;
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="idPersona")
     private Persona persona;
 

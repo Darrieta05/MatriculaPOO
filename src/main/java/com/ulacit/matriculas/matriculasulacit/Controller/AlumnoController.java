@@ -4,7 +4,11 @@ import com.ulacit.matriculas.matriculasulacit.Modelos.Constante;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Response;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Alumno;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Alumno_Id;
+import com.ulacit.matriculas.matriculasulacit.Modelos.Carrera;
+import com.ulacit.matriculas.matriculasulacit.Modelos.Persona;
 import com.ulacit.matriculas.matriculasulacit.Repository.AlumnoRepository;
+import com.ulacit.matriculas.matriculasulacit.Repository.PersonaRepository;
+import com.ulacit.matriculas.matriculasulacit.Repository.CarreraRepository;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +22,12 @@ public class AlumnoController {
 
     @Autowired
     AlumnoRepository alumnoRepository;
+
+    @Autowired
+    PersonaRepository personaRepository;
+
+    @Autowired
+    CarreraRepository carreraRepository;
 
     private Response response;
 
@@ -40,11 +50,13 @@ public class AlumnoController {
     @ApiOperation(value = "Obtiene un alumno filtrándolo por el parámetro idAlumno")
 
     @RequestMapping(method = RequestMethod.GET, value = "/{idAlumno}")
-    public Response GetById(@PathVariable("idAlumno") Alumno_Id idAlumno) {
+    public Response GetById(@PathVariable("idAlumno") Integer idAlumno) {
         response = new Response();
-
+        
+        Persona p = personaRepository.findByIdPersonaInAndEliminadoIn(idAlumno, false);
+        Alumno_Id alumnoKey = new Alumno_Id(idAlumno, p);
         try {
-            Alumno alumno = alumnoRepository.findOne(idAlumno.getIdAlumno());
+            Alumno alumno = alumnoRepository.findOne(alumnoKey);
             response.setResponse(alumno);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -64,8 +76,14 @@ public class AlumnoController {
             if (alumnoObj != null) {
                 response.setRequest(alumnoObj);
 
-                alumnoRepository.save(alumnoObj);
-                response.setResponse(alumnoObj);
+                 Persona p = personaRepository.findByIdPersonaInAndEliminadoIn(alumnoObj.getAlumnoKey().getPersona().getIdPersona(), false);
+                 Carrera c = carreraRepository.findOne(alumnoObj.getCarrera().getIdCarrera());
+                 if (p != null && c != null) {
+                    alumnoObj.getAlumnoKey().setPersona(p);
+                    alumnoObj.setCarrera(c);
+                    alumnoRepository.save(alumnoObj);
+                    response.setResponse(alumnoObj);
+                }
             }
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -78,17 +96,19 @@ public class AlumnoController {
     @ApiOperation(value = "Modifica la información de un alumno")
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{idAlumno}")
-    public Response Update(@PathVariable("idAlumno") Alumno_Id idAlumno, @RequestBody Alumno alumnoObj) {
+    public Response Update(@PathVariable("idAlumno") Integer idAlumno, @RequestBody Alumno alumnoObj) {
         response = new Response();
         Alumno alumnoStored;
 
         try {
             if (alumnoObj != null) {
-                alumnoObj.setAlumnoKey(idAlumno);
 
                 response.setRequest(alumnoObj);
-
-                alumnoStored = alumnoRepository.findOne(idAlumno.getIdAlumno());
+                
+                Persona p = personaRepository.findByIdPersonaInAndEliminadoIn(idAlumno, false);
+                Alumno_Id alumnoKey = new Alumno_Id(idAlumno, p);
+                
+                alumnoStored = alumnoRepository.findOne(alumnoKey);
 
                 if (alumnoStored != null) {
                     alumnoObj.setAlumnoKey(alumnoStored.getAlumnoKey());
@@ -110,13 +130,15 @@ public class AlumnoController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{idAlumno}")
-    public Response Delete(@PathVariable("idAlumno") Alumno_Id idAlumno) {
+    public Response Delete(@PathVariable("idAlumno") Integer idAlumno) {
 
         Response response = new Response();
         Alumno alumnoStored;
         try {
             response.setRequest(idAlumno);
-            alumnoStored = alumnoRepository.findOne(idAlumno.getIdAlumno());
+            Persona p = personaRepository.findByIdPersonaInAndEliminadoIn(idAlumno, false);
+            Alumno_Id alumnoKey = new Alumno_Id(idAlumno, p);
+            alumnoStored = alumnoRepository.findOne(alumnoKey);
 
             if (alumnoStored != null) {
 

@@ -1,9 +1,16 @@
 package com.ulacit.matriculas.matriculasulacit.Controller;
 
+import com.ulacit.matriculas.matriculasulacit.Modelos.Alumno;
+import com.ulacit.matriculas.matriculasulacit.Modelos.Alumno_Id;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Constante;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Response;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Matricula;
+import com.ulacit.matriculas.matriculasulacit.Modelos.Persona;
+import com.ulacit.matriculas.matriculasulacit.Modelos.Usuario;
+import com.ulacit.matriculas.matriculasulacit.Repository.AlumnoRepository;
 import com.ulacit.matriculas.matriculasulacit.Repository.MatriculaRepository;
+import com.ulacit.matriculas.matriculasulacit.Repository.PersonaRepository;
+import com.ulacit.matriculas.matriculasulacit.Repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +24,16 @@ public class MatriculaController {
     
     @Autowired
     MatriculaRepository matriculaRepository;
-
+    
+    @Autowired
+    AlumnoRepository alumnoRepository;
+    
+    @Autowired
+    PersonaRepository personaRepository;
+    
+    @Autowired
+    UsuarioRepository usuarioRepository;
+    
     private Response response;
     private Date fechaActual;
 
@@ -68,9 +84,19 @@ public class MatriculaController {
                 matriculaObj.setFechaCreacion(fechaActual);
                 matriculaObj.setFechaActualizacion(fechaActual);
                 matriculaObj.setEliminado(false);
-
-                matriculaRepository.save(matriculaObj);
-                response.setResponse(matriculaObj);
+                
+                
+                Persona p = personaRepository.findByIdPersonaInAndEliminadoIn(matriculaObj.getAlumno().getAlumnoKey().getIdAlumno(), false);
+                Alumno_Id alumnoKey = new Alumno_Id(matriculaObj.getAlumno().getAlumnoKey().getIdAlumno(), p);
+                
+                Alumno a = alumnoRepository.findOne(alumnoKey);
+                Usuario u = usuarioRepository.findOne(matriculaObj.getUsuario().getIdUsuario());
+                if (a != null && u != null) {
+                    matriculaObj.setAlumno(a);
+                    matriculaObj.setUsuario(u);
+                    matriculaRepository.save(matriculaObj);
+                    response.setResponse(matriculaObj);
+                }
             }
         } catch (Exception e) {
             response.setMessage(e.getMessage());

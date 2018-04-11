@@ -11,7 +11,6 @@ public class Alumno_Id implements Serializable{
     private int idAlumno;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idPersona")
-    @MapsId("persona")
     private Persona persona;
  
     public Alumno_Id() {
@@ -51,5 +50,10 @@ public class Alumno_Id implements Serializable{
 
     public void setPersona(Persona persona) {
         this.persona = persona;
+    }
+    
+    public void setIdPersona(Integer idPersona)
+    {
+        this.persona.setIdPersona(idPersona);
     }
 }

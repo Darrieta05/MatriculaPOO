@@ -3,7 +3,9 @@ package com.ulacit.matriculas.matriculasulacit.Controller;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Constante;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Response;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Contacto;
+import com.ulacit.matriculas.matriculasulacit.Modelos.Persona;
 import com.ulacit.matriculas.matriculasulacit.Repository.ContactoRepository;
+import com.ulacit.matriculas.matriculasulacit.Repository.PersonaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +19,9 @@ public class ContactoController {
     
     @Autowired
     ContactoRepository contactoRepository;
+    
+    @Autowired
+    PersonaRepository personaRepository;
 
     private Response response;
     private Date currentDate;
@@ -62,9 +67,13 @@ public class ContactoController {
         try {
             if (contactoObj != null) {
                 response.setRequest(contactoObj);
-
-                contactoRepository.save(contactoObj);
-                response.setResponse(contactoObj);
+                
+                Persona p = personaRepository.findByIdPersonaInAndEliminadoIn(contactoObj.getPersona().getIdPersona(), false);
+                if (p != null) {
+                    contactoObj.setPersona(p);
+                    contactoRepository.save(contactoObj);
+                    response.setResponse(contactoObj);
+                }
             }
         } catch (Exception e) {
             response.setMessage(e.getMessage());

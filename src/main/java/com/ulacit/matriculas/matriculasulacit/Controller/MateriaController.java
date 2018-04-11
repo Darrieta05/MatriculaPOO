@@ -41,8 +41,8 @@ public class MateriaController {
         response = new Response();
 
         try {
-            Materia materia = materiaRepository.findOne(idMateria);
-            response.setResponse(materia);
+            Materia materiaObj = materiaRepository.findOne(idMateria);
+            response.setResponse(materiaObj);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
             response.setHttpStatus(Constante.badRequest);
@@ -101,28 +101,6 @@ public class MateriaController {
             response.setHttpStatus(Constante.badRequest);
         }
 
-        return response;
-    }
-
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{idMateria}")
-    public Response Delete(@PathVariable("idMateria") Integer idMateria) {
-
-        Response response = new Response();
-        Materia materiaStored;
-        try {
-            response.setRequest(idMateria);
-            materiaStored = materiaRepository.findOne(idMateria);
-
-            if (materiaStored != null) {
-                materiaRepository.delete(materiaStored);
-                response.setResponse(Constante.itemDeleted);
-            } else {
-                throw new Exception(Constante.itemNotFound);
-            }
-        } catch (Exception e) {
-            response.setMessage(e.getMessage());
-            response.setHttpStatus(Constante.badRequest);
-        }
         return response;
     }
 }

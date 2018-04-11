@@ -107,27 +107,4 @@ public class UsuarioController {
 
         return response;
     }
-
-    //@ApiOperation(value = "Elimina la información de una usuario")
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{idUsuario}")
-    public Response Delete(@PathVariable("idUsuario") Integer idUsuario) {
-
-        Response response = new Response();
-        Usuario usuarioStored;
-        try {
-            response.setRequest(idUsuario);
-            usuarioStored = usuarioRepository.findOne(idUsuario);
-
-            if (usuarioStored != null) {
-                usuarioRepository.delete(usuarioStored);
-                response.setResponse(Constante.itemDeleted);
-            } else {
-                throw new Exception(Constante.itemNotFound);
-            }
-        } catch (Exception e) {
-            response.setMessage(e.getMessage());
-            response.setHttpStatus(Constante.badRequest);
-        }
-        return response;
-    }
 }

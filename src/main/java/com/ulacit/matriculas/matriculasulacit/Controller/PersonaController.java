@@ -120,28 +120,4 @@ public class PersonaController {
 
         return response;
     }
-
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{idPersona}")
-    public Response Delete(@PathVariable("idPersona") Integer idPersona) {
-
-        Response response = new Response();
-        Persona personaStored;
-        try {
-            response.setRequest(idPersona);
-            personaStored = personaRepository.findByIdPersonaInAndEliminadoIn(idPersona, false);
-
-            if (personaStored != null) {
-                personaStored.setEliminado(true);
-                personaStored.setFechaActualizacion(new Date());
-                personaRepository.delete(personaStored);
-                response.setResponse(Constante.itemDeleted);
-            } else {
-                throw new Exception(Constante.itemNotFound);
-            }
-        } catch (Exception e) {
-            response.setMessage(e.getMessage());
-            response.setHttpStatus(Constante.badRequest);
-        }
-        return response;
-    }
 }

@@ -53,8 +53,8 @@ public class AlumnoController {
     public Response GetById(@PathVariable("idAlumno") Integer idAlumno) {
         response = new Response();
         
-        Persona p = personaRepository.findByIdPersonaInAndEliminadoIn(idAlumno, false);
-        Alumno_Id alumnoKey = new Alumno_Id(idAlumno, p);
+        Persona personaObj = personaRepository.findByIdPersonaInAndEliminadoIn(idAlumno, false);
+        Alumno_Id alumnoKey = new Alumno_Id(idAlumno, personaObj);
         try {
             Alumno alumno = alumnoRepository.findOne(alumnoKey);
             response.setResponse(alumno);
@@ -76,11 +76,11 @@ public class AlumnoController {
             if (alumnoObj != null) {
                 response.setRequest(alumnoObj);
 
-                 Persona p = personaRepository.findByIdPersonaInAndEliminadoIn(alumnoObj.getAlumnoKey().getPersona().getIdPersona(), false);
-                 Carrera c = carreraRepository.findOne(alumnoObj.getCarrera().getIdCarrera());
-                 if (p != null && c != null) {
-                    alumnoObj.getAlumnoKey().setPersona(p);
-                    alumnoObj.setCarrera(c);
+                 Persona personaObj = personaRepository.findByIdPersonaInAndEliminadoIn(alumnoObj.getAlumnoKey().getPersona().getIdPersona(), false);
+                 Carrera carreraObj = carreraRepository.findOne(alumnoObj.getCarrera().getIdCarrera());
+                 if (personaObj != null && carreraObj != null) {
+                    alumnoObj.getAlumnoKey().setPersona(personaObj);
+                    alumnoObj.setCarrera(carreraObj);
                     alumnoRepository.save(alumnoObj);
                     response.setResponse(alumnoObj);
                 }
@@ -105,8 +105,8 @@ public class AlumnoController {
 
                 response.setRequest(alumnoObj);
                 
-                Persona p = personaRepository.findByIdPersonaInAndEliminadoIn(idAlumno, false);
-                Alumno_Id alumnoKey = new Alumno_Id(idAlumno, p);
+                Persona personaObj = personaRepository.findByIdPersonaInAndEliminadoIn(idAlumno, false);
+                Alumno_Id alumnoKey = new Alumno_Id(idAlumno, personaObj);
                 
                 alumnoStored = alumnoRepository.findOne(alumnoKey);
 
@@ -126,31 +126,6 @@ public class AlumnoController {
             response.setHttpStatus(Constante.badRequest);
         }
 
-        return response;
-    }
-
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{idAlumno}")
-    public Response Delete(@PathVariable("idAlumno") Integer idAlumno) {
-
-        Response response = new Response();
-        Alumno alumnoStored;
-        try {
-            response.setRequest(idAlumno);
-            Persona p = personaRepository.findByIdPersonaInAndEliminadoIn(idAlumno, false);
-            Alumno_Id alumnoKey = new Alumno_Id(idAlumno, p);
-            alumnoStored = alumnoRepository.findOne(alumnoKey);
-
-            if (alumnoStored != null) {
-
-                alumnoRepository.delete(alumnoStored);
-                response.setResponse(Constante.itemDeleted);
-            } else {
-                throw new Exception(Constante.itemNotFound);
-            }
-        } catch (Exception e) {
-            response.setMessage(e.getMessage());
-            response.setHttpStatus(Constante.badRequest);
-        }
         return response;
     }
 }

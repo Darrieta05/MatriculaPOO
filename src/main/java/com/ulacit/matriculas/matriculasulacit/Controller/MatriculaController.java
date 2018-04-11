@@ -86,14 +86,14 @@ public class MatriculaController {
                 matriculaObj.setEliminado(false);
                 
                 
-                Persona p = personaRepository.findByIdPersonaInAndEliminadoIn(matriculaObj.getAlumno().getAlumnoKey().getIdAlumno(), false);
-                Alumno_Id alumnoKey = new Alumno_Id(matriculaObj.getAlumno().getAlumnoKey().getIdAlumno(), p);
+                Persona personaObj = personaRepository.findByIdPersonaInAndEliminadoIn(matriculaObj.getAlumno().getAlumnoKey().getIdAlumno(), false);
+                Alumno_Id alumnoKey = new Alumno_Id(matriculaObj.getAlumno().getAlumnoKey().getIdAlumno(), personaObj);
                 
-                Alumno a = alumnoRepository.findOne(alumnoKey);
-                Usuario u = usuarioRepository.findOne(matriculaObj.getUsuario().getIdUsuario());
-                if (a != null && u != null) {
-                    matriculaObj.setAlumno(a);
-                    matriculaObj.setUsuario(u);
+                Alumno alumnoObj = alumnoRepository.findOne(alumnoKey);
+                Usuario usuarioObj = usuarioRepository.findOne(matriculaObj.getUsuario().getIdUsuario());
+                if (alumnoObj != null && usuarioObj != null) {
+                    matriculaObj.setAlumno(alumnoObj);
+                    matriculaObj.setUsuario(usuarioObj);
                     matriculaRepository.save(matriculaObj);
                     response.setResponse(matriculaObj);
                 }
@@ -144,30 +144,6 @@ public class MatriculaController {
             response.setHttpStatus(Constante.badRequest);
         }
 
-        return response;
-    }
-
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{idMatricula}")
-    public Response Delete(@PathVariable("idMatricula") Integer idMatricula) {
-
-        Response response = new Response();
-        Matricula matriculaStored;
-        try {
-            response.setRequest(idMatricula);
-            matriculaStored = matriculaRepository.findByIdMatriculaInAndEliminadoIn(idMatricula, false);
-
-            if (matriculaStored != null) {
-                matriculaStored.setEliminado(true);
-                matriculaStored.setFechaActualizacion(new Date());
-                matriculaRepository.delete(matriculaStored);
-                response.setResponse(Constante.itemDeleted);
-            } else {
-                throw new Exception(Constante.itemNotFound);
-            }
-        } catch (Exception e) {
-            response.setMessage(e.getMessage());
-            response.setHttpStatus(Constante.badRequest);
-        }
         return response;
     }
 }

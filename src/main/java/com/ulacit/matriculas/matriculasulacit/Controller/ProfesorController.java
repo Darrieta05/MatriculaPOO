@@ -20,7 +20,6 @@ public class ProfesorController {
     @Autowired
     ProfesorRepository profesorRepository;
     
-    
     @Autowired
     PersonaRepository personaRepository;
 
@@ -49,8 +48,8 @@ public class ProfesorController {
         response = new Response();
 
         try {
-            Persona p = personaRepository.findByIdPersonaInAndEliminadoIn(idProfesor, false);
-            Profesor_Id profesorKey = new Profesor_Id(idProfesor, p);
+            Persona personaObj = personaRepository.findByIdPersonaInAndEliminadoIn(idProfesor, false);
+            Profesor_Id profesorKey = new Profesor_Id(idProfesor, personaObj);
             Profesor profesor = profesorRepository.findOne(profesorKey);
             response.setResponse(profesor);
         } catch (Exception e) {
@@ -71,9 +70,9 @@ public class ProfesorController {
             if (profesorObj != null) {
                 response.setRequest(profesorObj);
                 
-                Persona p = personaRepository.findByIdPersonaInAndEliminadoIn(profesorObj.getProfesorKey().getPersona().getIdPersona(), false);
-                 if (p != null) {
-                    profesorObj.getProfesorKey().setPersona(p);
+                Persona personaObj = personaRepository.findByIdPersonaInAndEliminadoIn(profesorObj.getProfesorKey().getPersona().getIdPersona(), false);
+                 if (personaObj != null) {
+                    profesorObj.getProfesorKey().setPersona(personaObj);
                     profesorRepository.save(profesorObj);
                     response.setResponse(profesorObj);
                 }
@@ -98,8 +97,8 @@ public class ProfesorController {
 
                 response.setRequest(profesorObj);
 
-                Persona p = personaRepository.findByIdPersonaInAndEliminadoIn(idProfesor, false);
-                Profesor_Id profesorKey = new Profesor_Id(idProfesor, p);
+                Persona personaObj = personaRepository.findByIdPersonaInAndEliminadoIn(idProfesor, false);
+                Profesor_Id profesorKey = new Profesor_Id(idProfesor, personaObj);
                 profesorStored = profesorRepository.findOne(profesorKey);
 
                 if (profesorStored != null) {

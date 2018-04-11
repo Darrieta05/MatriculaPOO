@@ -105,26 +105,4 @@ public class CarreraController {
 
         return response;
     }
-
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{idCarrera}")
-    public Response Delete(@PathVariable("idCarrera") Integer idCarrera) {
-
-        Response response = new Response();
-        Carrera carreraStored;
-        try {
-            response.setRequest(idCarrera);
-            carreraStored = carreraRepository.findOne(idCarrera);
-
-            if (carreraStored != null) {
-                carreraRepository.delete(carreraStored);
-                response.setResponse(Constante.itemDeleted);
-            } else {
-                throw new Exception(Constante.itemNotFound);
-            }
-        } catch (Exception e) {
-            response.setMessage(e.getMessage());
-            response.setHttpStatus(Constante.badRequest);
-        }
-        return response;
-    }
 }

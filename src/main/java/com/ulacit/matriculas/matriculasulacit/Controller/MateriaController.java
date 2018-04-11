@@ -47,8 +47,8 @@ public class MateriaController {
         response = new Response();
 
         try {
-            Materia materia = materiaRepository.findOne(idMateria);
-            response.setResponse(materia);
+            Materia materiaObj = materiaRepository.findOne(idMateria);
+            response.setResponse(materiaObj);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
             response.setHttpStatus(Constante.badRequest);
@@ -116,5 +116,4 @@ public class MateriaController {
 
         return response;
     }
-    
 }

@@ -103,26 +103,4 @@ public class AulaController {
 
         return response;
     }
-
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{idAula}")
-    public Response Delete(@PathVariable("idAula") Integer idAula) {
-
-        Response response = new Response();
-        Aula aulaStored;
-        try {
-            response.setRequest(idAula);
-            aulaStored = aulaRepository.findOne(idAula);
-
-            if (aulaStored != null) {
-                aulaRepository.delete(aulaStored);
-                response.setResponse(Constante.itemDeleted);
-            } else {
-                throw new Exception(Constante.itemNotFound);
-            }
-        } catch (Exception e) {
-            response.setMessage(e.getMessage());
-            response.setHttpStatus(Constante.badRequest);
-        }
-        return response;
-    }
 }

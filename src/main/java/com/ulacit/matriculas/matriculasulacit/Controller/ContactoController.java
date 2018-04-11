@@ -6,6 +6,7 @@ import com.ulacit.matriculas.matriculasulacit.Modelos.Contacto;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Persona;
 import com.ulacit.matriculas.matriculasulacit.Repository.ContactoRepository;
 import com.ulacit.matriculas.matriculasulacit.Repository.PersonaRepository;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,14 +44,21 @@ public class ContactoController {
         return response;
     }
 
-    /*@ApiOperation(value = "Obtiene un alumno filtrándolo por el parámetro idContacto")*/
-    @RequestMapping(method = RequestMethod.GET, value = "/{idContacto}")
-    public Response GetById(@PathVariable("idContacto") Integer idContacto) {
+    /* @ApiOperation(value = "Retorna el listado de todas las detalle matricula")*/
+    @RequestMapping(method = RequestMethod.GET, value = "/{idPersona}")
+    public Response GetAll(@PathVariable("idPersona") Integer idPersona) {
         response = new Response();
-
+        
+        ArrayList<Contacto> listaContactoFiltro = new ArrayList<Contacto>();
+        
         try {
-            Contacto contacto = contactoRepository.findOne(idContacto);
-            response.setResponse(contacto);
+            List<Contacto> listaContacto = contactoRepository.findAll();
+            for(Contacto contacto : listaContacto) {
+                if (contacto.getPersona().getIdPersona() == idPersona) {
+                    listaContactoFiltro.add(contacto);
+                }
+            }
+            response.setResponse(listaContactoFiltro);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
             response.setHttpStatus(Constante.badRequest);
@@ -68,9 +76,9 @@ public class ContactoController {
             if (contactoObj != null) {
                 response.setRequest(contactoObj);
                 
-                Persona p = personaRepository.findByIdPersonaInAndEliminadoIn(contactoObj.getPersona().getIdPersona(), false);
-                if (p != null) {
-                    contactoObj.setPersona(p);
+                Persona personaObj = personaRepository.findByIdPersonaInAndEliminadoIn(contactoObj.getPersona().getIdPersona(), false);
+                if (personaObj != null) {
+                    contactoObj.setPersona(personaObj);
                     contactoRepository.save(contactoObj);
                     response.setResponse(contactoObj);
                 }

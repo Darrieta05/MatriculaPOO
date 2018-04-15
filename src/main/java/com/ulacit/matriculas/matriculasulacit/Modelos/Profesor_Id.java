@@ -21,6 +21,21 @@ public class Profesor_Id implements Serializable{
         this.persona = id_persona;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Profesor_Id)) return false;
+        Profesor_Id that = (Profesor_Id) o;
+        return idProfesor == that.idProfesor &&
+                Objects.equals(persona, that.persona);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(idProfesor, persona);
+    }
+
     public int getIdProfesor() {
         return idProfesor;
     }

@@ -4,6 +4,7 @@ import com.ulacit.matriculas.matriculasulacit.Modelos.Constante;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Response;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Carrera;
 import com.ulacit.matriculas.matriculasulacit.Repository.CarreraRepository;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,15 +14,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/carrera")
 public class CarreraController {
-    
+
     @Autowired
     CarreraRepository carreraRepository;
 
     private Response response;
 
 
-
-    /* @ApiOperation(value = "Retorna el listado de todas las carreras")*/
+    @ApiOperation(value = "Retorna el listado de todas las carreras")
     @RequestMapping(method = RequestMethod.GET)
     public Response GetAll() {
         response = new Response();
@@ -37,7 +37,7 @@ public class CarreraController {
         return response;
     }
 
-    /*@ApiOperation(value = "Obtiene un alumno filtrándolo por el parámetro idCarrera")*/
+    @ApiOperation(value = "Obtiene un alumno filtrándolo por el parámetro idCarrera")
     @RequestMapping(method = RequestMethod.GET, value = "/{idCarrera}")
     public Response GetById(@PathVariable("idCarrera") Integer idCarrera) {
         response = new Response();
@@ -103,6 +103,29 @@ public class CarreraController {
             response.setHttpStatus(Constante.badRequest);
         }
 
+        return response;
+    }
+
+    @ApiOperation(value = "Elimina lógicamente una carrera3")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{idCarrera}")
+    public Response Delete(@PathVariable("idCarrera") Integer idCarrera) {
+
+        response = new Response();
+        Carrera carreraStored;
+        try {
+            response.setRequest(idCarrera);
+            carreraStored = carreraRepository.findOne(idCarrera);
+
+            if (carreraStored != null) {
+                carreraRepository.save(carreraStored);
+                response.setResponse(Constante.itemDeleted);
+            } else {
+                throw new Exception(Constante.itemNotFound);
+            }
+        } catch (Exception e) {
+            response.setMessage(e.getMessage());
+            response.setHttpStatus(Constante.badRequest);
+        }
         return response;
     }
 }

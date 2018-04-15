@@ -7,6 +7,8 @@ import com.ulacit.matriculas.matriculasulacit.Modelos.Persona;
 import com.ulacit.matriculas.matriculasulacit.Repository.ContactoRepository;
 import com.ulacit.matriculas.matriculasulacit.Repository.PersonaRepository;
 import java.util.ArrayList;
+
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,10 +27,8 @@ public class ContactoController {
     PersonaRepository personaRepository;
 
     private Response response;
-    private Date currentDate;
 
-
-    /* @ApiOperation(value = "Retorna el listado de todas las contacto")*/
+    @ApiOperation(value = "Retorna el listado de todas las contacto")
     @RequestMapping(method = RequestMethod.GET)
     public Response GetAll() {
         response = new Response();
@@ -44,9 +44,9 @@ public class ContactoController {
         return response;
     }
 
-    /* @ApiOperation(value = "Retorna el listado de todas las detalle matricula")*/
+    @ApiOperation(value = "Retorna el listado de todas las detalle matricula")
     @RequestMapping(method = RequestMethod.GET, value = "/{idPersona}")
-    public Response GetAll(@PathVariable("idPersona") Integer idPersona) {
+    public Response GetById(@PathVariable("idPersona") Integer idPersona) {
         response = new Response();
         
         ArrayList<Contacto> listaContactoFiltro = new ArrayList<Contacto>();
@@ -67,7 +67,7 @@ public class ContactoController {
         return response;
     }
 
-    /*@ApiOperation(value = "Agrega una nueva contacto")*/
+    @ApiOperation(value = "Agrega una nueva contacto")
     @RequestMapping(method = RequestMethod.POST)
     public Response Create(@RequestBody Contacto contactoObj) {
         response = new Response();
@@ -91,7 +91,7 @@ public class ContactoController {
         return response;
     }
 
-    /*@ApiOperation(value = "Modifica la información de un contacto")*/
+    @ApiOperation(value = "Modifica la información de un contacto")
     @RequestMapping(method = RequestMethod.PUT, value = "/{idContacto}")
     public Response Update(@PathVariable("idContacto") Integer idContacto, @RequestBody Contacto contactoObj) {
         response = new Response();

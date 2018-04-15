@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
@@ -52,7 +53,7 @@ public class AlumnoController {
     @RequestMapping(method = RequestMethod.GET, value = "/{idAlumno}")
     public Response GetById(@PathVariable("idAlumno") Integer idAlumno) {
         response = new Response();
-        
+
         Persona personaObj = personaRepository.findByIdPersonaInAndEliminadoIn(idAlumno, false);
         Alumno_Id alumnoKey = new Alumno_Id(idAlumno, personaObj);
         try {
@@ -76,9 +77,9 @@ public class AlumnoController {
             if (alumnoObj != null) {
                 response.setRequest(alumnoObj);
 
-                 Persona personaObj = personaRepository.findByIdPersonaInAndEliminadoIn(alumnoObj.getAlumnoKey().getPersona().getIdPersona(), false);
-                 Carrera carreraObj = carreraRepository.findOne(alumnoObj.getCarrera().getIdCarrera());
-                 if (personaObj != null && carreraObj != null) {
+                Persona personaObj = personaRepository.findByIdPersonaInAndEliminadoIn(alumnoObj.getAlumnoKey().getPersona().getIdPersona(), false);
+                Carrera carreraObj = carreraRepository.findOne(alumnoObj.getCarrera().getIdCarrera());
+                if (personaObj != null && carreraObj != null) {
                     alumnoObj.getAlumnoKey().setPersona(personaObj);
                     alumnoObj.setCarrera(carreraObj);
                     alumnoRepository.save(alumnoObj);
@@ -104,10 +105,10 @@ public class AlumnoController {
             if (alumnoObj != null) {
 
                 response.setRequest(alumnoObj);
-                
+
                 Persona personaObj = personaRepository.findByIdPersonaInAndEliminadoIn(idAlumno, false);
                 Alumno_Id alumnoKey = new Alumno_Id(idAlumno, personaObj);
-                
+
                 alumnoStored = alumnoRepository.findOne(alumnoKey);
 
                 if (alumnoStored != null) {
@@ -126,6 +127,31 @@ public class AlumnoController {
             response.setHttpStatus(Constante.badRequest);
         }
 
+        return response;
+    }
+
+    @ApiOperation(value = "Elimina lógicamente un alumno")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{idAlumno}")
+    public Response Delete(@PathVariable("idAlumno") Integer idAlumno) {
+
+        response = new Response();
+        Alumno alumnoStored;
+        try {
+            response.setRequest(idAlumno);
+            Persona personaObj = personaRepository.findByIdPersonaInAndEliminadoIn(idAlumno, false);
+            Alumno_Id alumnoKey = new Alumno_Id(idAlumno, personaObj);
+            alumnoStored = alumnoRepository.findOne(alumnoKey);
+
+            if (alumnoStored != null) {
+                alumnoRepository.save(alumnoStored);
+                response.setResponse(Constante.itemDeleted);
+            } else {
+                throw new Exception(Constante.itemNotFound);
+            }
+        } catch (Exception e) {
+            response.setMessage(e.getMessage());
+            response.setHttpStatus(Constante.badRequest);
+        }
         return response;
     }
 }

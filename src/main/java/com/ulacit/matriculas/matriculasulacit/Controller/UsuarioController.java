@@ -5,6 +5,7 @@ import com.ulacit.matriculas.matriculasulacit.Modelos.Constante;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Response;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Usuario;
 import com.ulacit.matriculas.matriculasulacit.Repository.UsuarioRepository;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,14 +15,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/usuario")
 public class UsuarioController {
-    
+
     @Autowired
     UsuarioRepository usuarioRepository;
 
     private Response response;
 
 
-    /*@ApiOperation(value = "Retorna el listado de todas las usuario")*/
+    @ApiOperation(value = "Retorna el listado de todas las usuario")
     @RequestMapping(method = RequestMethod.GET)
     public Response GetAll() {
         response = new Response();
@@ -37,7 +38,7 @@ public class UsuarioController {
         return response;
     }
 
-    /*@ApiOperation(value = "Retorna el matricula filtrando idUsuario")*/
+    @ApiOperation(value = "Retorna el matricula filtrando idUsuario")
     @RequestMapping(method = RequestMethod.GET, value = "/{idUsuario}")
     public Response GetById(@PathVariable("idUsuario") Integer idUsuario) {
         response = new Response();
@@ -75,7 +76,7 @@ public class UsuarioController {
     }
 
 
-    /*@ApiOperation(value = "Modifica la información de una usuario")*/
+    @ApiOperation(value = "Modifica la información de una usuario")
     @RequestMapping(method = RequestMethod.PUT, value = "/{idUsuario}")
     public Response Update(@PathVariable("idUsuario") Integer idUsuario, @RequestBody Usuario usuarioObj) {
         response = new Response();
@@ -105,6 +106,29 @@ public class UsuarioController {
             response.setHttpStatus(Constante.badRequest);
         }
 
+        return response;
+    }
+
+    @ApiOperation(value = "Elimina lógicamente una materia")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{idUsuario}")
+    public Response Delete(@PathVariable("idUsuario") Integer idUsuario) {
+
+        response = new Response();
+        Usuario usuarioStored;
+        try {
+            response.setRequest(idUsuario);
+            usuarioStored = usuarioRepository.findOne(idUsuario);
+
+            if (usuarioStored != null) {
+                usuarioRepository.save(usuarioStored);
+                response.setResponse(Constante.itemDeleted);
+            } else {
+                throw new Exception(Constante.itemNotFound);
+            }
+        } catch (Exception e) {
+            response.setMessage(e.getMessage());
+            response.setHttpStatus(Constante.badRequest);
+        }
         return response;
     }
 }

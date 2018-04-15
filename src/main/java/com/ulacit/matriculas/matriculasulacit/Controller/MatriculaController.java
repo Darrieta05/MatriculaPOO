@@ -11,6 +11,7 @@ import com.ulacit.matriculas.matriculasulacit.Repository.AlumnoRepository;
 import com.ulacit.matriculas.matriculasulacit.Repository.MatriculaRepository;
 import com.ulacit.matriculas.matriculasulacit.Repository.PersonaRepository;
 import com.ulacit.matriculas.matriculasulacit.Repository.UsuarioRepository;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,7 +39,7 @@ public class MatriculaController {
     private Date fechaActual;
 
 
-    /*@ApiOperation(value = "Retorna el listado de todas las matriculas")*/
+    @ApiOperation(value = "Retorna el listado de todas las matriculas")
     @RequestMapping(method = RequestMethod.GET)
     public Response GetAll() {
         response = new Response();
@@ -54,7 +55,7 @@ public class MatriculaController {
         return response;
     }
 
-    /*@ApiOperation(value = "Retorna el matricula filtrando idMatricula")*/
+    @ApiOperation(value = "Retorna el matricula filtrando idMatricula")
     @RequestMapping(method = RequestMethod.GET, value = "/{idMatricula}")
     public Response GetById(@PathVariable("idMatricula") Integer idMatricula) {
         response = new Response();
@@ -71,7 +72,7 @@ public class MatriculaController {
     }
 
 
-    /*@ApiOperation(value = "Agrega una nueva matricula")*/
+    @ApiOperation(value = "Agrega una nueva matricula")
     @RequestMapping(method = RequestMethod.POST)
     public Response Create(@RequestBody Matricula matriculaObj) {
         response = new Response();
@@ -107,7 +108,7 @@ public class MatriculaController {
     }
 
 
-    /*@ApiOperation(value = "Modifica la información de una matricula")*/
+    @ApiOperation(value = "Modifica la información de una matricula")
     @RequestMapping(method = RequestMethod.PUT, value = "/{idMatricula}")
     public Response Update(@PathVariable("idMatricula") Integer idMatricula, @RequestBody Matricula matriculaObj) {
         response = new Response();
@@ -144,6 +145,31 @@ public class MatriculaController {
             response.setHttpStatus(Constante.badRequest);
         }
 
+        return response;
+    }
+
+    @ApiOperation(value = "Elimina lógicamente una matricula")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{idMatricula}")
+    public Response Delete(@PathVariable("idMatricula") Integer idMatricula) {
+
+        response = new Response();
+        Matricula matriculaStored;
+        try {
+            response.setRequest(idMatricula);
+            matriculaStored = matriculaRepository.findByIdMatriculaInAndEliminadoIn(idMatricula, true);
+
+            if (matriculaStored != null) {
+                matriculaRepository.delete(matriculaStored);
+                matriculaStored.setEliminado(true);
+                matriculaStored.setFechaActualizacion(fechaActual);
+                response.setResponse(Constante.itemDeleted);
+            } else {
+                throw new Exception(Constante.itemNotFound);
+            }
+        } catch (Exception e) {
+            response.setMessage(e.getMessage());
+            response.setHttpStatus(Constante.badRequest);
+        }
         return response;
     }
 }

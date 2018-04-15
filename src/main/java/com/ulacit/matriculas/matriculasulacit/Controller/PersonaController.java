@@ -4,6 +4,7 @@ import com.ulacit.matriculas.matriculasulacit.Modelos.Constante;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Response;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Persona;
 import com.ulacit.matriculas.matriculasulacit.Repository.PersonaRepository;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,7 @@ public class PersonaController {
     private Date fechaActual;
 
 
-    /*@ApiOperation(value = "Retorna el listado de todas las personas")*/
+    @ApiOperation(value = "Retorna el listado de todas las personas")
     @RequestMapping(method = RequestMethod.GET)
     public Response GetAll() {
         response = new Response();
@@ -38,7 +39,7 @@ public class PersonaController {
         return response;
     }
 
-    /*@ApiOperation(value = "Retorna el matricula filtrando idPersona")*/
+    @ApiOperation(value = "Retorna el matricula filtrando idPersona")
     @RequestMapping(method = RequestMethod.GET, value = "/{idPersona}")
     public Response GetById(@PathVariable("idPersona") Integer idPersona) {
         response = new Response();
@@ -55,7 +56,7 @@ public class PersonaController {
     }
 
 
-    /*@ApiOperation(value = "Agrega una nueva persona")*/
+    @ApiOperation(value = "Agrega una nueva persona")
     @RequestMapping(method = RequestMethod.POST)
     public Response Create(@RequestBody Persona personaObj) {
         response = new Response();
@@ -81,12 +82,11 @@ public class PersonaController {
     }
 
 
-    /*@ApiOperation(value = "Modifica la información de una persona")*/
+    @ApiOperation(value = "Modifica la información de una persona")
     @RequestMapping(method = RequestMethod.PUT, value = "/{idPersona}")
     public Response Update(@PathVariable("idPersona") Integer idPersona, @RequestBody Persona personaObj) {
         response = new Response();
         Persona personaStored;
-        fechaActual = new Date();
 
         try {
             if (personaObj != null) {
@@ -118,6 +118,31 @@ public class PersonaController {
             response.setHttpStatus(Constante.badRequest);
         }
 
+        return response;
+    }
+
+    @ApiOperation(value = "Elimina lógicamente una persona")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{idPersona}")
+    public Response Delete(@PathVariable("idPersona") Integer idPersona) {
+
+        response = new Response();
+        Persona personaStored;
+        try {
+            response.setRequest(idPersona);
+            personaStored = personaRepository.findByIdPersonaInAndEliminadoIn(idPersona, true);
+
+            if (personaStored != null) {
+                personaRepository.save(personaStored);
+                personaStored.setFechaActualizacion(fechaActual);
+                personaStored.setEliminado(true);
+                response.setResponse(Constante.itemDeleted);
+            } else {
+                throw new Exception(Constante.itemNotFound);
+            }
+        } catch (Exception e) {
+            response.setMessage(e.getMessage());
+            response.setHttpStatus(Constante.badRequest);
+        }
         return response;
     }
 }

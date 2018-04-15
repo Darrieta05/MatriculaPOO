@@ -4,6 +4,7 @@ import com.ulacit.matriculas.matriculasulacit.Modelos.*;
 import com.ulacit.matriculas.matriculasulacit.Repository.AulaRepository;
 import com.ulacit.matriculas.matriculasulacit.Repository.CarreraRepository;
 import com.ulacit.matriculas.matriculasulacit.Repository.MateriaRepository;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,7 @@ public class MateriaController {
 
     private Response response;
 
-    /* @ApiOperation(value = "Retorna el listado de todas las materias")*/
+    @ApiOperation(value = "Retorna el listado de todas las materias")
     @RequestMapping(method = RequestMethod.GET)
     public Response GetAll() {
         response = new Response();
@@ -41,7 +42,7 @@ public class MateriaController {
         return response;
     }
 
-    /*@ApiOperation(value = "Obtiene un alumno filtrándolo por el parámetro idMateria")*/
+    @ApiOperation(value = "Obtiene un alumno filtrándolo por el parámetro idMateria")
     @RequestMapping(method = RequestMethod.GET, value = "/{idMateria}")
     public Response GetById(@PathVariable("idMateria") Integer idMateria) {
         response = new Response();
@@ -84,7 +85,7 @@ public class MateriaController {
         return response;
     }
 
-    /*@ApiOperation(value = "Modifica la información de una materia")*/
+    @ApiOperation(value = "Modifica la información de una materia")
     @RequestMapping(method = RequestMethod.PUT, value = "/{idMateria}")
     public Response Update(@PathVariable("idMateria") Integer idMateria, @RequestBody Materia materiaObj) {
         response = new Response();
@@ -114,6 +115,29 @@ public class MateriaController {
             response.setHttpStatus(Constante.badRequest);
         }
 
+        return response;
+    }
+
+    @ApiOperation(value = "Elimina lógicamente una materia")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{idMateria}")
+    public Response Delete(@PathVariable("idMateria") Integer idMateria) {
+
+        response = new Response();
+        Materia materiaStored;
+        try {
+            response.setRequest(idMateria);
+            materiaStored = materiaRepository.findOne(idMateria);
+
+            if (materiaStored != null) {
+                materiaRepository.save(materiaStored);
+                response.setResponse(Constante.itemDeleted);
+            } else {
+                throw new Exception(Constante.itemNotFound);
+            }
+        } catch (Exception e) {
+            response.setMessage(e.getMessage());
+            response.setHttpStatus(Constante.badRequest);
+        }
         return response;
     }
 }

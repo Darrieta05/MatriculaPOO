@@ -4,9 +4,11 @@ import com.ulacit.matriculas.matriculasulacit.Modelos.Constante;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Response;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Aula;
 import com.ulacit.matriculas.matriculasulacit.Repository.AulaRepository;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
@@ -19,7 +21,7 @@ public class AulaController {
 
     private Response response;
 
-    /* @ApiOperation(value = "Retorna el listado de todas las aulas")*/
+    @ApiOperation(value = "Retorna el listado de todas las aulas")
     @RequestMapping(method = RequestMethod.GET)
     public Response GetAll() {
         response = new Response();
@@ -101,6 +103,35 @@ public class AulaController {
             response.setHttpStatus(Constante.badRequest);
         }
 
+        return response;
+    }
+
+    @ApiOperation(value = "Elimina lógicamente un aula")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{idAula}")
+    public Response Delete(@PathVariable("idAula") Integer idAula) {
+
+        response = new Response();
+        Aula aulaStored;
+        try
+        {
+            response.setRequest(idAula);
+            aulaStored = aulaRepository.findOne(idAula);
+
+            if (aulaStored != null)
+            {
+                aulaRepository.save(aulaStored);
+                response.setResponse(Constante.itemDeleted);
+            }
+            else
+            {
+                throw new Exception(Constante.itemNotFound);
+            }
+        }
+        catch (Exception e)
+        {
+            response.setMessage(e.getMessage());
+            response.setHttpStatus(Constante.badRequest);
+        }
         return response;
     }
 }

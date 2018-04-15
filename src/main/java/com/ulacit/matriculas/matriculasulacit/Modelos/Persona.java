@@ -1,7 +1,5 @@
 package com.ulacit.matriculas.matriculasulacit.Modelos;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import java.util.Date;
 import javax.persistence.*;
 

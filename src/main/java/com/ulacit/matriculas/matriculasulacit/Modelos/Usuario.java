@@ -8,9 +8,6 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idUsuario;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="idRol")
-    private Rol rol;
     private String nombre;
     private String clave;
 
@@ -24,14 +21,6 @@ public class Usuario {
 
     public void setIdUsuario(int idUsuario) {
         this.idUsuario = idUsuario;
-    }
-
-    public Rol getRol() {
-        return rol;
-    }
-
-    public void setRol(Rol rol) {
-        this.rol = rol;
     }
 
     public String getNombre() {

@@ -1,5 +1,7 @@
 package com.ulacit.matriculas.matriculasulacit.Modelos;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import java.io.Serializable;
 import javax.persistence.*;
 
@@ -15,6 +17,9 @@ public class DetalleMatricula implements Serializable{
     @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name="idMateria")
     private Materia materia;
+
+    @Value("0")
+    private int eliminado;
 
 
     public DetalleMatricula()
@@ -45,4 +50,8 @@ public class DetalleMatricula implements Serializable{
     public void setMateria(Materia materia) {
         this.materia = materia;
     }
+
+    public int getEliminado() { return this.eliminado; }
+
+    public void setEliminado(int value ) { this.eliminado = value; }
 }

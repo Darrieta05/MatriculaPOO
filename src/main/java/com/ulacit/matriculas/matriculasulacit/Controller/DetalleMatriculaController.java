@@ -43,7 +43,7 @@ public class DetalleMatriculaController {
         try {
             List<DetalleMatricula> listaDetalleMatricula = detalleMatriculaRepository.findAll();
             for (DetalleMatricula detalles : listaDetalleMatricula) {
-                if (detalles.getMatricula().getIdMatricula() == idDetalleMatricula) {
+                if (detalles.getMatricula().getIdMatricula() == idDetalleMatricula && detalles.getEliminado() == 0) {
                     listaDetalleMatriculaFiltro.add(detalles);
                 }
             }
@@ -128,6 +128,7 @@ public class DetalleMatriculaController {
             detalleMatriculaStored = detalleMatriculaRepository.findOne(idDetalleMatricula);
 
             if (detalleMatriculaStored != null) {
+                detalleMatriculaStored.setEliminado(1);
                 detalleMatriculaRepository.save(detalleMatriculaStored);
                 response.setResponse(Constante.itemDeleted);
             } else {

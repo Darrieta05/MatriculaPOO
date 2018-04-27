@@ -15,7 +15,7 @@ public class MatriculasUlacitApplication {
 		SpringApplication.run(MatriculasUlacitApplication.class, args);
 	}
 
-	//Enable Global CORS support for the application
+	//Deja habilitado los cors y sus respectivos servicios
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurerAdapter() {
@@ -24,7 +24,7 @@ public class MatriculasUlacitApplication {
 				registry.addMapping("/**")
 						.allowedOrigins("*")
 						.allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD")
-						.allowedHeaders("Content-Type") //What is this for?
+						.allowedHeaders("Content-Type")
 						.allowCredentials(true);
 
 			}

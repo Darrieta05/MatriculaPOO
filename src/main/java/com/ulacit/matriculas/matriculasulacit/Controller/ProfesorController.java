@@ -134,7 +134,7 @@ public class ProfesorController {
             profesorStored = profesorRepository.findOne(profesorKey);
 
             if (profesorStored != null) {
-                profesorRepository.save(profesorStored);
+                profesorRepository.delete(profesorStored);
                 response.setResponse(Constante.itemDeleted);
             } else {
                 throw new Exception(Constante.itemNotFound);

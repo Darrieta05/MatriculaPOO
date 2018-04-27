@@ -38,7 +38,7 @@ public class AlumnoController {
         response = new Response();
 
         try {
-            List<Alumno> listaAlumno = alumnoRepository.findAll();
+            List<Alumno> listaAlumno = alumnoRepository.findByEliminado(false);
             response.setResponse(listaAlumno);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
@@ -143,6 +143,7 @@ public class AlumnoController {
             alumnoStored = alumnoRepository.findOne(alumnoKey);
 
             if (alumnoStored != null) {
+                alumnoStored.setEliminado(true);
                 alumnoRepository.save(alumnoStored);
                 response.setResponse(Constante.itemDeleted);
             } else {

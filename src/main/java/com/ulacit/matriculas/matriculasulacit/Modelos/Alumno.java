@@ -1,5 +1,7 @@
 package com.ulacit.matriculas.matriculasulacit.Modelos;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import java.io.Serializable;
 import javax.persistence.*;
 
@@ -16,6 +18,11 @@ public class Alumno implements Serializable{
     @JoinColumn(name="idCarrera")
     private Carrera carrera;
     private String Beca;
+
+    @Value("false")
+    private boolean eliminado;
+    public boolean getEliminado() { return this.eliminado; }
+    public void setEliminado(boolean value ) { this.eliminado = value; }
 
     public Alumno() {
         super();

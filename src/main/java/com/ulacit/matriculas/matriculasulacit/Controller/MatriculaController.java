@@ -156,12 +156,12 @@ public class MatriculaController {
         Matricula matriculaStored;
         try {
             response.setRequest(idMatricula);
-            matriculaStored = matriculaRepository.findByIdMatriculaInAndEliminadoIn(idMatricula, true);
+            matriculaStored = matriculaRepository.findByIdMatriculaInAndEliminadoIn(idMatricula, false);
 
             if (matriculaStored != null) {
-                matriculaRepository.delete(matriculaStored);
                 matriculaStored.setEliminado(true);
                 matriculaStored.setFechaActualizacion(fechaActual);
+                matriculaRepository.save(matriculaStored);
                 response.setResponse(Constante.itemDeleted);
             } else {
                 throw new Exception(Constante.itemNotFound);

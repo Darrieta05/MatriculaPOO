@@ -135,6 +135,7 @@ public class PersonaController {
                 personaRepository.save(personaStored);
                 personaStored.setFechaActualizacion(fechaActual);
                 personaStored.setEliminado(true);
+                /*Aqui se aplica el patron de Observer con el response*/
                 response.setResponse(Constante.itemDeleted);
             } else {
                 throw new Exception(Constante.itemNotFound);

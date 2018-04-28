@@ -5,6 +5,7 @@ import com.ulacit.matriculas.matriculasulacit.Modelos.Response;
 import com.ulacit.matriculas.matriculasulacit.Modelos.Aula;
 import com.ulacit.matriculas.matriculasulacit.Repository.AulaRepository;
 import io.swagger.annotations.ApiOperation;
+/*Se utiliza de forma implicita el uso del patron de factory por medio de las anotaciones de spring*/
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

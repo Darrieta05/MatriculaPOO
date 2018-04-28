@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 
+/*Aqui se esta aplicando el patron de Repository*/
 @CrossOrigin
 @RestController
 @RequestMapping("/api/alumno")
@@ -76,7 +77,7 @@ public class AlumnoController {
         try {
             if (alumnoObj != null) {
                 response.setRequest(alumnoObj);
-
+                /*Aqui se aplica el patron de Adapter*/
                 Persona personaObj = personaRepository.findByIdPersonaInAndEliminadoIn(alumnoObj.getAlumnoKey().getPersona().getIdPersona(), false);
                 Carrera carreraObj = carreraRepository.findOne(alumnoObj.getCarrera().getIdCarrera());
                 if (personaObj != null && carreraObj != null) {
